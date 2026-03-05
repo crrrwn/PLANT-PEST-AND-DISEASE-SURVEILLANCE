@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Brand CSS variables (from COLOR_PALETTE.png) ── */
+:root {
+  --brand-dark:  #0D5C6A;
+  --brand-mid:   #129EAC;
+  --brand-light: #00CDD2;
+  --brand-pale:  #E8F9FA;
+}
+
+@layer base {
+  * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+  html, body, #root { height: 100%; width: 100%; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #e5e7eb; overflow: hidden; }
+}
+
+@layer components {
+
+  /* ── App shell — responsive ─────────────────── */
+  .app-shell {
+    @apply relative flex flex-col bg-white;
+    width: 100%;
+    height: 100dvh;
+    /* Mobile: full screen. Tablet+: centered card */
+    max-width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  @media (min-width: 640px) {
+    body { display: flex; align-items: center; justify-content: center; background: #cbd5e1; }
+    .app-shell {
+      max-width: 480px;
+      height: 96dvh;
+      border-radius: 2rem;
+      box-shadow: 0 8px 60px rgba(0,0,0,0.35);
+    }
+  }
+  @media (min-width: 1024px) {
+    .app-shell {
+      max-width: 520px;
+      height: 92dvh;
+    }
+  }
+
+  /* ── Scrollable page body ───────────────────── */
+  .screen-content {
+    @apply flex-1 overflow-y-auto overflow-x-hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    background: #f4f8f9;
+  }
+  .screen-content::-webkit-scrollbar { display: none; }
+
+  /* ── Buttons ────────────────────────────────── */
+  .btn-primary {
+    @apply w-full text-white font-semibold py-3.5 rounded-2xl
+           active:scale-95 transition-all duration-150 shadow-md
+           focus:outline-none;
+    background: linear-gradient(135deg, var(--brand-dark), var(--brand-mid));
+  }
+  .btn-primary:hover { filter: brightness(1.08); }
+
+  .btn-secondary {
+    @apply w-full bg-white font-semibold py-3.5 rounded-2xl
+           border-2 active:scale-95 transition-all duration-150;
+    color: var(--brand-dark);
+    border-color: var(--brand-dark);
+  }
+
+  /* ── Inputs ─────────────────────────────────── */
+  .input-field {
+    @apply w-full bg-white border border-gray-200 rounded-xl px-4 py-3
+           text-sm text-gray-800 placeholder-gray-400
+           focus:outline-none transition-all duration-150;
+  }
+  .input-field:focus {
+    border-color: var(--brand-mid);
+    box-shadow: 0 0 0 3px rgba(18,158,172,0.15);
+  }
+
+  /* ── Cards ──────────────────────────────────── */
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-4;
+  }
+
+  /* ── Form label ─────────────────────────────── */
+  .form-label {
+    @apply block text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-1.5;
+  }
+
+  /* ── Bottom nav ─────────────────────────────── */
+  .nav-tab {
+    @apply flex flex-col items-center justify-center gap-0.5 flex-1 py-2
+           transition-colors duration-150;
+    color: #9ca3af;
+  }
+  .nav-tab.active { color: var(--brand-dark); }
+
+  /* ── Record row ─────────────────────────────── */
+  .record-row {
+    @apply flex items-start gap-3 p-3 bg-white rounded-xl border border-gray-100 active:bg-gray-50 transition-colors w-full text-left;
+  }
+
+  /* ── Modal backdrop ─────────────────────────── 
+     FIXED: use inset-0 relative to VIEWPORT, no broken centering trick.
+     The sheet inside is centered with mx-auto.
+  ─────────────────────────────────────────────── */
+  .modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 9999;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  /* Sheet that slides up inside the modal-backdrop */
+  .modal-sheet {
+    @apply bg-white rounded-t-3xl flex flex-col;
+    width: 100%;
+    max-width: 520px;
+  }
+}
+
+/* Leaflet z-fix */
+.leaflet-container { z-index: 1; }
+.leaflet-pane      { z-index: 1; }
+.leaflet-top,
+.leaflet-bottom    { z-index: 10; }
+
+/* Thin scrollbar */
+.thin-scroll::-webkit-scrollbar { width: 3px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: #5DDDDF; border-radius: 99px; }
+
+/* Animations */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up { animation: fade-in-up 0.4s ease-out forwards; }
+
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin-slow 2s linear infinite; }
+
+@keyframes slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.slide-up { animation: slide-up 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+/* Ping animation for map markers */
+@keyframes ping {
+  75%, 100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
