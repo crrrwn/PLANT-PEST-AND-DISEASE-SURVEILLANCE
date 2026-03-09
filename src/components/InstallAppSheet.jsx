@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Download, Smartphone, CheckCircle } from 'lucide-react';
+import { Download, CheckCircle } from 'lucide-react';
 
 const DARK = '#4e7e44';
 
@@ -49,10 +49,12 @@ export default function InstallAppSheet({ onClose }) {
     <Modal title="Install PSDSM App" onClose={onClose}>
       <div className="space-y-4">
         <div className="flex items-center justify-center gap-3 p-4 rounded-2xl" style={{ background:'#f9e6c2' }}>
-          <Smartphone size={28} style={{ color:DARK }} />
+          <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-md ring-2 ring-white/80 flex-shrink-0">
+            <img src="/DALOGO.jpg" alt="PSDSM" className="w-full h-full object-cover" />
+          </div>
           <div>
             <p className="font-bold text-gray-800">Add to Home Screen</p>
-            <p className="text-xs text-gray-500">Use PSDSM like a native app</p>
+            <p className="text-xs text-gray-500">Use PSDSM like a native app — this icon will appear on your home screen.</p>
           </div>
         </div>
 
