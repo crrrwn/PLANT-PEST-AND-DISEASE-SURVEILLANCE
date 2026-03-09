@@ -137,10 +137,7 @@ export default function RequestForm() {
               <div className="grid grid-cols-2 gap-2">
                 <F label="Quantity"><input type="number" className="input-field" placeholder="0" value={item.quantity} onChange={setItem(idx,'quantity')} /></F>
                 <F label="Type of BCA / Service">
-                  <select className="input-field" value={item.service} onChange={setItem(idx,'service')}>
-                    <option value="">Select…</option>
-                    {SERVICES.map(s => <option key={s}>{s}</option>)}
-                  </select>
+                  <input className="input-field" placeholder="e.g. Bio-control agents, FFS" value={item.service} onChange={setItem(idx,'service')} autoComplete="off" />
                 </F>
               </div>
               <F label="Purpose"><input className="input-field" placeholder="Purpose" value={item.purpose} onChange={setItem(idx,'purpose')} /></F>

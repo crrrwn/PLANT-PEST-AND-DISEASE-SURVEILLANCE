@@ -110,9 +110,12 @@ function buildRatingAnalytics(surveys, year, province) {
     ? +(avgs.filter(v=>v>0).reduce((a,b)=>a+b,0)/avgs.filter(v=>v>0).length).toFixed(2)
     : 0;
 
-  // Service provider breakdown
-  const providerMap = { DA:0, LGU:0, Both:0 };
-  filtered.forEach(s => { if (providerMap[s.serviceProvider]!==undefined) providerMap[s.serviceProvider]++; });
+  // Service provider breakdown (DA Regional only; legacy DA/LGU/Both mapped to DA Regional)
+  const providerMap = { 'DA Regional': 0 };
+  filtered.forEach(s => {
+    const p = ['DA','LGU','Both'].includes(s.serviceProvider) ? 'DA Regional' : s.serviceProvider;
+    if (p === 'DA Regional') providerMap['DA Regional']++;
+  });
 
   // On-time delivery
   const onTime    = filtered.filter(s => s.receivedOnTime === 'Yes').length;

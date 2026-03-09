@@ -2,21 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ChevronLeft, Star, CheckCircle, Loader, AlertCircle } from 'lucide-react';
 import { addSatisfactionSurvey, updateSatisfactionSurvey } from '../../firebase';
+import { PROVINCES, MUNICIPALITIES, BARANGAY_MUNICIPALITY, ORIENTAL_MUNICIPALITIES, BARANGAY_MUNICIPALITY_OCCIDENTAL, OCCIDENTAL_MUNICIPALITIES, BARANGAY_MUNICIPALITY_MARINDUQUE, MARINDUQUE_MUNICIPALITIES, BARANGAY_MUNICIPALITY_ROMBLON, ROMBLON_MUNICIPALITIES, BARANGAY_MUNICIPALITY_PALAWAN, PALAWAN_MUNICIPALITIES } from '../../data/locationData';
 
 const SERVICES = [
   'Biological Control Agents (BCA)','Pest Scouting / Monitoring','Technical Assistance',
   'Seeds / Planting Materials','Fertilizer / Soil Amendment','Farm Inputs',
   'Trainings / Seminars','Demonstration / Field Day','Other',
 ];
-const PROVINCES = ['Occidental Mindoro','Oriental Mindoro','Marinduque','Romblon','Palawan'];
 const GENDERS   = ['Male','Female','Prefer not to say'];
-const MUNICIPALITIES = {
-  'Occidental Mindoro': ['Abra de Ilog','Calintaan','Looc','Lubang','Magsaysay','Mamburao','Paluan','Rizal','Sablayan','San Jose','Santa Cruz'],
-  'Oriental Mindoro':   ['Baco','Bansud','Bongabong','Bulalacao','Calapan City','Gloria','Mansalay','Naujan','Pinamalayan','Pola','Puerto Galera','Roxas','San Teodoro','Socorro','Victoria'],
-  'Marinduque':         ['Boac','Buenavista','Gasan','Mogpog','Santa Cruz','Torrijos'],
-  'Romblon':            ['Alcantara','Banton','Cajidiocan','Calatrava','Concepcion','Corcuera','Ferrol','Looc','Magdiwang','Odiongan','Romblon','San Agustin','San Andres','San Fernando','San Jose','Santa Fe','Santa Maria'],
-  'Palawan':            ['Aborlan','Agutaya','Araceli','Balabac','Bataraza',"Brooke's Point",'Cagayancillo','Coron','Culion','Cuyo','Dumaran','El Nido','Española','Kalayaan','Linapacan','Magsaysay','Narra','Puerto Princesa City','Quezon','Rizal','Roxas','San Vicente','Sofronio Española','Taytay'],
-};
 
 function StarRating({ value, onChange, label }) {
   return (
@@ -36,10 +29,10 @@ function StarRating({ value, onChange, label }) {
 const BLANK = {
   clientType:'Individual',
   name:'', dob:'', gender:'Male', assocName:'', assocMembers:'',
-  street:'', barangay:'', city:'Abra de Ilog', province:'Occidental Mindoro', farmLocation:'',
+  street:'', barangay:'', municipality:'Abra de Ilog', province:'Occidental Mindoro', farmLocation:'',
   dateOfRequest: new Date().toISOString().slice(0,10),
   typeOfGoods:'', purpose:'', deliveryTarget:'', deliveryActual:'',
-  serviceProvider:'DA',
+  serviceProvider:'DA Regional',
   ratingQuantity:0, ratingServices:0, ratingAttitude:0, ratingPromptness:0,
   receivedOnTime:'', whyNotOnTime:'', additionalComments:'',
 };
@@ -50,7 +43,12 @@ export default function SatisfactionForm() {
   const editMode = state?.editMode === true;
   const existing = state?.record;
 
-  const [form,   setForm]   = useState(editMode && existing ? { ...BLANK, ...existing } : BLANK);
+  const [form,   setForm]   = useState(() => {
+    const base = editMode && existing ? { ...BLANK, ...existing } : BLANK;
+    if (base.city != null && base.municipality == null) base.municipality = base.city;
+    if (['DA','LGU','Both'].includes(base.serviceProvider)) base.serviceProvider = 'DA Regional';
+    return base;
+  });
   const [status, setStatus] = useState('idle');
   const [errMsg, setErrMsg] = useState('');
 
@@ -58,7 +56,39 @@ export default function SatisfactionForm() {
   const setVal = f => v => setForm(p => ({ ...p, [f]: v }));
   const setProvince = e => {
     const prov = e.target.value;
-    setForm(p => ({ ...p, province: prov, city: MUNICIPALITIES[prov][0] }));
+    const mun = prov === 'Oriental Mindoro' ? ORIENTAL_MUNICIPALITIES[0]
+      : prov === 'Occidental Mindoro' ? OCCIDENTAL_MUNICIPALITIES[0]
+      : prov === 'Marinduque' ? MARINDUQUE_MUNICIPALITIES[0]
+      : prov === 'Romblon' ? ROMBLON_MUNICIPALITIES[0]
+      : prov === 'Palawan' ? PALAWAN_MUNICIPALITIES[0]
+      : MUNICIPALITIES[prov][0];
+    const clearBarangay = ['Oriental Mindoro','Occidental Mindoro','Marinduque','Romblon','Palawan'].includes(prov);
+    setForm(p => ({ ...p, province: prov, municipality: mun, barangay: clearBarangay ? '' : p.barangay }));
+  };
+
+  const isOrientalMindoro = form.province === 'Oriental Mindoro';
+  const isOccidentalMindoro = form.province === 'Occidental Mindoro';
+  const isMarinduque = form.province === 'Marinduque';
+  const isRomblon = form.province === 'Romblon';
+  const isPalawan = form.province === 'Palawan';
+  const hasBarangayMunicipalityList = isOrientalMindoro || isOccidentalMindoro || isMarinduque || isRomblon || isPalawan;
+  const barangayMunicipalityList = isOrientalMindoro ? BARANGAY_MUNICIPALITY
+    : isOccidentalMindoro ? BARANGAY_MUNICIPALITY_OCCIDENTAL
+    : isMarinduque ? BARANGAY_MUNICIPALITY_MARINDUQUE
+    : isRomblon ? BARANGAY_MUNICIPALITY_ROMBLON
+    : isPalawan ? BARANGAY_MUNICIPALITY_PALAWAN
+    : [];
+  const municipalityOptions = isOrientalMindoro ? ORIENTAL_MUNICIPALITIES
+    : isOccidentalMindoro ? OCCIDENTAL_MUNICIPALITIES
+    : isMarinduque ? MARINDUQUE_MUNICIPALITIES
+    : isRomblon ? ROMBLON_MUNICIPALITIES
+    : isPalawan ? PALAWAN_MUNICIPALITIES
+    : [];
+  const filteredBarangays = hasBarangayMunicipalityList
+    ? barangayMunicipalityList.filter(bm => !form.municipality || bm.municipality === form.municipality)
+    : [];
+  const setBarangayMunicipality = (barangay, municipality) => {
+    setForm(p => ({ ...p, barangay, municipality }));
   };
 
   const avgRating = (() => {
@@ -163,27 +193,59 @@ export default function SatisfactionForm() {
 
         <Section title="Location Details" accent={DARK}>
           <F label="Street / Purok"><input className="input-field" placeholder="Street address" value={form.street} onChange={set('street')} /></F>
-          <F label="Barangay"><input className="input-field" placeholder="Barangay" value={form.barangay} onChange={set('barangay')} /></F>
           <F label="Province">
             <select className="input-field" value={form.province} onChange={setProvince}>
-              {PROVINCES.map(p=><option key={p}>{p}</option>)}
+              {PROVINCES.map(p => <option key={p}>{p}</option>)}
             </select>
           </F>
-          <F label="City / Municipality">
-            <select className="input-field" value={form.city} onChange={set('city')}>
-              {(MUNICIPALITIES[form.province] || []).map(m=><option key={m}>{m}</option>)}
-            </select>
-          </F>
+          <div className="grid grid-cols-2 gap-2">
+            <F label="Barangay">
+              {hasBarangayMunicipalityList ? (
+                <select
+                  className="input-field"
+                  value={form.barangay && form.municipality ? `${form.barangay}|${form.municipality}` : ''}
+                  onChange={e => {
+                    const v = e.target.value;
+                    if (!v) return;
+                    const [barangay, municipality] = v.split('|');
+                    if (barangay && municipality) setBarangayMunicipality(barangay, municipality);
+                  }}
+                >
+                  <option value="">Select barangay</option>
+                  {filteredBarangays.map(bm => (
+                    <option key={`${bm.barangay}-${bm.municipality}`} value={`${bm.barangay}|${bm.municipality}`}>{bm.barangay}</option>
+                  ))}
+                </select>
+              ) : (
+                <input className="input-field" placeholder="Barangay" value={form.barangay} onChange={set('barangay')} />
+              )}
+            </F>
+            <F label="Municipality">
+              {hasBarangayMunicipalityList ? (
+                <select
+                  className="input-field"
+                  value={form.municipality}
+                  onChange={e => {
+                    const mun = e.target.value;
+                    setForm(p => ({ ...p, municipality: mun, barangay: '' }));
+                  }}
+                >
+                  {municipalityOptions.map(m => <option key={m}>{m}</option>)}
+                </select>
+              ) : (
+                <select className="input-field" value={form.municipality} onChange={set('municipality')}>
+                  {(MUNICIPALITIES[form.province] || []).map(m => <option key={m}>{m}</option>)}
+                </select>
+              )}
+            </F>
+          </div>
           <F label="Farm Location"><input className="input-field" placeholder="GPS or description" value={form.farmLocation} onChange={set('farmLocation')} /></F>
         </Section>
 
         <Section title="Assistance Details" accent={DARK}>
           <F label="Date of Request *"><input type="date" className="input-field" value={form.dateOfRequest} onChange={set('dateOfRequest')} /></F>
           <F label="Type of Goods / Services">
-            <select className="input-field" value={form.typeOfGoods} onChange={set('typeOfGoods')}>
-              <option value="">Select service…</option>
-              {SERVICES.map(s=><option key={s}>{s}</option>)}
-            </select>
+            <input className="input-field" placeholder="e.g. BCA, Trainings, Technical Assistance" value={form.typeOfGoods} onChange={set('typeOfGoods')} autoComplete="off" />
           </F>
           <F label="Purpose"><input className="input-field" placeholder="Purpose" value={form.purpose} onChange={set('purpose')} /></F>
           <div className="grid grid-cols-2 gap-2">
@@ -205,7 +267,7 @@ export default function SatisfactionForm() {
           </div>
           <F label="Service Provider">
             <div className="flex gap-2">
-              {['DA','LGU','Both'].map(p=>(
+              {['DA Regional'].map(p=>(
                 <button key={p} type="button" onClick={()=>setForm(f=>({...f,serviceProvider:p}))}
                   className="flex-1 py-2 rounded-xl text-sm font-semibold border-2 transition-all"
                   style={form.serviceProvider===p

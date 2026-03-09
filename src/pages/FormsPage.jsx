@@ -165,7 +165,7 @@ function RecordDetail({ record: r, type, onBack, onClose, onDeleted }) {
       ['Assoc. Name',      r.assocName],
       ['No. of Members',   r.assocMembers],
       ['Province',         r.province],
-      ['City/Municipality',r.city],
+      ['City/Municipality', r.municipality || r.city],
       ['Barangay',         r.barangay],
       ['Date of Request',  r.dateOfRequest],
       ['Type of Goods',    r.typeOfGoods],
