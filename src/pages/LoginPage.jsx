@@ -87,6 +87,11 @@ export default function LoginPage() {
                 {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
+            <div className="mt-1.5 text-right">
+              <Link to="/forgot-password" className="text-xs font-medium" style={{ color: '#4e7e44' }}>
+                Forgot password?
+              </Link>
+            </div>
           </div>
 
           <div className="pt-1">
@@ -115,7 +120,7 @@ export default function LoginPage() {
             Don't have an account?{' '}
             <Link to="/register" className="font-semibold" style={{ color: '#4e7e44' }}>Register</Link>
           </p>
-          <p className="text-gray-400 text-xs">Authorized DA/LGU Personnel & Technicians Only</p>
+          <p className="text-gray-400 text-xs">Authorized DA Regional Personnel Only</p>
         </div>
         {showInstall && <InstallAppSheet onClose={() => setShowInstall(false)} />}
       </div>

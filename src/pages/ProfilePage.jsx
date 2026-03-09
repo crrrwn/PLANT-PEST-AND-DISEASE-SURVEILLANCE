@@ -46,21 +46,20 @@ function StatusMsg({ type, msg }) {
 
 /* ─── Edit Profile Sheet ─────────────────────────── */
 function EditProfileSheet({ user, onClose }) {
-  const [name,     setName]     = useState((user?.displayName||'').split(' — ')[0]);
-  const [position, setPosition] = useState((user?.displayName||'').split(' — ')[1]||'');
-  const [loading,  setLoading]  = useState(false);
-  const [status,   setStatus]   = useState({ type:'', msg:'' });
+  const [name,    setName]    = useState((user?.displayName || '').split(' — ')[0].trim() || '');
+  const [loading, setLoading] = useState(false);
+  const [status,   setStatus]  = useState({ type:'', msg:'' });
 
   const save = async () => {
-    setLoading(true); setStatus({ type:'', msg:'' });
+    setStatus({ type:'', msg:'' });
+    if (!name?.trim()) { setStatus({ type:'error', msg:'Please enter your name.' }); return; }
+    setLoading(true);
     try {
-      await updateProfile(auth.currentUser, {
-        displayName: position ? `${name} — ${position}` : name
-      });
+      await updateProfile(auth.currentUser, { displayName: name.trim() });
       setStatus({ type:'success', msg:'Profile updated successfully!' });
       setTimeout(onClose, 1500);
     } catch (e) {
-      setStatus({ type:'error', msg: e.message || 'Update failed.' });
+      setStatus({ type:'error', msg: e?.message || 'Update failed.' });
     } finally { setLoading(false); }
   };
 
@@ -71,10 +70,6 @@ function EditProfileSheet({ user, onClose }) {
         <div>
           <label className="form-label">Full Name</label>
           <input className="input-field" value={name} onChange={e=>setName(e.target.value)} placeholder="Juan Dela Cruz" />
-        </div>
-        <div>
-          <label className="form-label">Position / Agency</label>
-          <input className="input-field" value={position} onChange={e=>setPosition(e.target.value)} placeholder="DA Technician" />
         </div>
         <div>
           <label className="form-label">Email Address</label>
@@ -100,18 +95,31 @@ function ChangePasswordSheet({ onClose }) {
 
   const save = async () => {
     setStatus({ type:'', msg:'' });
+    if (!cur?.trim())          { setStatus({ type:'error', msg:'Enter your current password.' }); return; }
     if (next.length < 6)       { setStatus({ type:'error', msg:'New password must be at least 6 characters.' }); return; }
     if (next !== confirm)      { setStatus({ type:'error', msg:'Passwords do not match.' }); return; }
     setLoading(true);
     try {
-      const cred = EmailAuthProvider.credential(auth.currentUser.email, cur);
-      await reauthenticateWithCredential(auth.currentUser, cred);
-      await updatePassword(auth.currentUser, next);
+      const user = auth.currentUser;
+      if (!user?.email) {
+        setStatus({ type:'error', msg:'Cannot change password for this account type.' });
+        setLoading(false);
+        return;
+      }
+      const cred = EmailAuthProvider.credential(user.email, cur);
+      await reauthenticateWithCredential(user, cred);
+      await updatePassword(user, next);
       setStatus({ type:'success', msg:'Password changed successfully!' });
       setTimeout(onClose, 1500);
     } catch (e) {
-      const msgs = { 'auth/wrong-password':'Current password is incorrect.', 'auth/too-many-requests':'Too many attempts.' };
-      setStatus({ type:'error', msg: msgs[e.code] || 'Failed to change password.' });
+      const code = e?.code || e?.message || '';
+      const msgs = {
+        'auth/wrong-password': 'Current password is incorrect.',
+        'auth/invalid-credential': 'Current password is incorrect.',
+        'auth/too-many-requests': 'Too many attempts. Try again later.',
+        'auth/requires-recent-login': 'Please sign out, sign in again, then try changing your password.',
+      };
+      setStatus({ type:'error', msg: msgs[code] || e?.message || 'Failed to change password.' });
     } finally { setLoading(false); }
   };
 
@@ -233,7 +241,7 @@ function AboutSheet({ onClose }) {
           { label:'Framework',    val:'React + Vite + Tailwind CSS' },
           { label:'Database',     val:'Firebase Firestore with Offline Persistence' },
           { label:'Mapping',      val:'OpenStreetMap via Leaflet.js' },
-          { label:'Developed for',val:'DA/LGU Personnel & Technicians' },
+          { label:'Developed for',val:'DA Regional Field Office' },
         ].map(({ label, val }) => (
           <div key={label} className="flex gap-3 py-2 border-b border-gray-50 last:border-0">
             <span className="text-[11px] text-gray-400 w-28 shrink-0">{label}</span>

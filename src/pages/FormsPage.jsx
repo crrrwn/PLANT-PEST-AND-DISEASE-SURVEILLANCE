@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import {
-  ClipboardList, FileText, Star, ChevronRight, CheckCircle,
+  ClipboardList, FileText, Star, ChevronRight,
   Eye, Plus, Clock, MapPin, Edit3, Trash2, Map, ArrowLeft
 } from 'lucide-react';
 import { db, deletePestReport, deleteRequestForm, deleteSatisfactionSurvey } from '../firebase';
@@ -398,14 +398,6 @@ function FormsMenu() {
       </div>
 
       <div className="screen-content content-container pb-4 pt-4 space-y-3">
-        {/* Offline hint */}
-        <div className="alert-success">
-          <CheckCircle size={15} className="shrink-0" />
-          <p className="text-xs font-medium">
-            Offline supported — data auto-syncs when connected.
-          </p>
-        </div>
-
         {FORM_DEFS.map(({ path, type, title, subtitle, Icon, color, num }) => (
           <div key={path} className="card overflow-hidden p-0">
             <div className="flex items-center gap-3 px-4 pt-4 pb-3">

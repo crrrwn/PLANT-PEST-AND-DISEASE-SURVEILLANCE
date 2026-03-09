@@ -3,8 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 import LoadingScreen from './pages/LoadingScreen';
-import LoginPage     from './pages/LoginPage';
-import RegisterPage  from './pages/RegisterPage';
+import LoginPage         from './pages/LoginPage';
+import RegisterPage      from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import MainLayout    from './pages/MainLayout';
 
 function AppRoutes() {
@@ -20,8 +21,9 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/login"    element={!user ? <LoginPage />    : <Navigate to="/"      replace />} />
-      <Route path="/register" element={!user ? <RegisterPage /> : <Navigate to="/"      replace />} />
+      <Route path="/login"         element={!user ? <LoginPage />         : <Navigate to="/" replace />} />
+      <Route path="/register"      element={!user ? <RegisterPage />      : <Navigate to="/" replace />} />
+      <Route path="/forgot-password" element={!user ? <ForgotPasswordPage /> : <Navigate to="/" replace />} />
       <Route path="/*"        element={user  ? <MainLayout />   : <Navigate to="/login" replace />} />
     </Routes>
   );
