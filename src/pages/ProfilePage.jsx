@@ -3,8 +3,9 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import {
   LogOut, Shield, Bell, Wifi, WifiOff, ChevronRight,
   Info, Database, Edit3, CheckCircle, Eye, EyeOff,
-  Trash2, AlertCircle
+  Trash2, AlertCircle, Download
 } from 'lucide-react';
+import InstallAppSheet from '../components/InstallAppSheet';
 import {
   updateProfile, updatePassword, EmailAuthProvider,
   reauthenticateWithCredential, deleteUser
@@ -333,7 +334,7 @@ export default function ProfilePage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const [sheet,    setSheet]    = useState(null); // 'edit'|'password'|'cache'|'about'|'notifications'|'delete'
+  const [sheet,    setSheet]    = useState(null); // 'edit'|'password'|'cache'|'about'|'install'|'notifications'|'delete'
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [notifPref,setNotifPref]= useState({ highRiskAlerts:true, newReports:false, syncSuccess:true });
   const [logging,  setLogging]  = useState(false);
@@ -369,6 +370,12 @@ export default function ProfilePage() {
     {
       group:'App Settings',
       items: [
+        {
+          Icon: Download,
+          label:'Install App',
+          sub: 'Add PSDSM to home screen',
+          action:() => setSheet('install'),
+        },
         {
           Icon: Bell,
           label:'Notifications',
@@ -483,6 +490,7 @@ export default function ProfilePage() {
       {sheet === 'password'      && <ChangePasswordSheet                    onClose={() => setSheet(null)} />}
       {sheet === 'cache'         && <CacheSheet                             onClose={() => setSheet(null)} />}
       {sheet === 'about'         && <AboutSheet                             onClose={() => setSheet(null)} />}
+      {sheet === 'install'       && <InstallAppSheet                        onClose={() => setSheet(null)} />}
       {sheet === 'notifications' && <NotificationsSheet  prefs={notifPref} onSave={setNotifPref} onClose={() => setSheet(null)} />}
       {sheet === 'delete'        && <DeleteAccountSheet  onClose={() => setSheet(null)} onLogout={handleLogout} />}
     </div>

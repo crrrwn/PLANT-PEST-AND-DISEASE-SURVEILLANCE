@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, EyeOff, Lock, Mail, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, AlertCircle, Download } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import InstallAppSheet from '../components/InstallAppSheet';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -10,6 +11,7 @@ export default function LoginPage() {
   const [showPw, setShowPw]     = useState(false);
   const [error, setError]       = useState('');
   const [loading, setLoading]   = useState(false);
+  const [showInstall, setShowInstall] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,12 +102,18 @@ export default function LoginPage() {
         </form>
 
         <div className="mt-auto pt-6 text-center space-y-2">
+          <button type="button" onClick={() => setShowInstall(true)}
+            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-teal-200 text-teal-700 text-sm font-medium hover:bg-teal-50 transition-colors">
+            <Download size={16} />
+            Install App (Add to Home Screen)
+          </button>
           <p className="text-gray-500 text-sm">
             Don't have an account?{' '}
             <Link to="/register" className="font-semibold" style={{ color: '#0D5C6A' }}>Register</Link>
           </p>
           <p className="text-gray-400 text-xs">Authorized DA/LGU Personnel & Technicians Only</p>
         </div>
+        {showInstall && <InstallAppSheet onClose={() => setShowInstall(false)} />}
       </div>
     </div>
   );
