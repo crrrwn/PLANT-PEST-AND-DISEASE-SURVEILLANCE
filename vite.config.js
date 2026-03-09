@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['PSDSMLOGO.png'],
+      includeAssets: ['DALOGO.jpg'],
       manifest: {
         name: 'PSDSM - Plant Pest & Disease Surveillance Monitoring',
         short_name: 'PSDSM',
@@ -20,21 +20,21 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/PSDSMLOGO.png',
+            src: '/DALOGO.jpg',
             sizes: '192x192',
-            type: 'image/png',
+            type: 'image/jpeg',
             purpose: 'any maskable'
           },
           {
-            src: '/PSDSMLOGO.png',
+            src: '/DALOGO.jpg',
             sizes: '512x512',
-            type: 'image/png',
+            type: 'image/jpeg',
             purpose: 'any maskable'
           }
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,woff2}'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', position: '', password: '', confirm: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
   const [showPw, setShowPw]   = useState(false);
   const [error, setError]     = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export default function RegisterPage() {
     if (form.password !== form.confirm) { setError('Passwords do not match.'); return; }
     setLoading(true);
     try {
-      await register(form.email, form.password, `${form.name}${form.position ? ' — ' + form.position : ''}`);
+      await register(form.email, form.password, form.name);
       setSuccess(true);
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
@@ -80,12 +80,6 @@ export default function RegisterPage() {
               </div>
             </div>
           ))}
-
-          <div>
-            <label className="form-label">Position / Agency</label>
-            <input className="input-field" placeholder="e.g. DA Technician / LGU-Palawan"
-              value={form.position} onChange={update('position')} />
-          </div>
 
           {[
             { label: 'Password *',         field: 'password', ph: 'Min 6 characters' },

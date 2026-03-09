@@ -70,6 +70,46 @@ function FlyToMarker({ flyTo, markerRefs }) {
   return null;
 }
 
+// Single risk marker: on click, zoom map to this marker
+function RiskMarker({ report, isTarget, markerRefs }) {
+  const map = useMap();
+  const lat = parseFloat(report.latitude);
+  const lng = parseFloat(report.longitude);
+  if (isNaN(lat) || isNaN(lng)) return null;
+
+  const color = getSeverityColor(report.percentInfestation);
+  const handleClick = useCallback(() => {
+    map.flyTo([lat, lng], 14, { duration: 1 });
+  }, [map, lat, lng]);
+
+  return (
+    <Marker
+      position={[lat, lng]}
+      icon={isTarget ? mkHighlightIcon(color) : mkIcon(color)}
+      ref={el => { if (el) markerRefs.current[report.id] = el; }}
+      eventHandlers={{ click: handleClick }}
+    >
+      <Popup>
+        <div style={{ minWidth: 180, fontSize: 12 }}>
+          <p style={{ fontWeight: 700, fontSize: 13, marginBottom: 4 }}>
+            {report.farmerName || '—'}
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+            <span style={{ display: 'inline-block', width: 10, height: 10, borderRadius: '50%', background: color }} />
+            <strong style={{ color }}>{getSeverityLabel(report.percentInfestation)}</strong>
+            <span style={{ color: '#6b7280', marginLeft: 4 }}>({report.percentInfestation}%)</span>
+          </div>
+          <p><b>Crop:</b> {report.crop} {report.variety ? `— ${report.variety}` : ''}</p>
+          <p><b>Pest:</b> {report.pests || '—'}</p>
+          <p><b>Location:</b> {[report.municipality, report.province].filter(Boolean).join(', ') || '—'}</p>
+          {report.areaAffected && <p><b>Area Affected:</b> {report.areaAffected} ha</p>}
+          <p style={{ color: '#9ca3af', fontSize: 10, marginTop: 4 }}>{report.date || ''}</p>
+        </div>
+      </Popup>
+    </Marker>
+  );
+}
+
 function mkHighlightIcon(color) {
   return L.divIcon({
     className: '',
@@ -246,39 +286,14 @@ export default function MapPage() {
                 attribution='&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              {filtered.map(r => {
-                const lat = parseFloat(r.latitude);
-                const lng = parseFloat(r.longitude);
-                if (isNaN(lat) || isNaN(lng)) return null;
-                const color    = getSeverityColor(r.percentInfestation);
-                const isTarget = flyTo?.id === r.id;
-                return (
-                  <Marker
-                    key={r.id}
-                    position={[lat, lng]}
-                    icon={isTarget ? mkHighlightIcon(color) : mkIcon(color)}
-                    ref={el => { if (el) markerRefs.current[r.id] = el; }}
-                  >
-                    <Popup>
-                      <div style={{ minWidth: 180, fontSize: 12 }}>
-                        <p style={{ fontWeight: 700, fontSize: 13, marginBottom: 4 }}>
-                          {r.farmerName || '—'}
-                        </p>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                          <span style={{ display: 'inline-block', width: 10, height: 10, borderRadius: '50%', background: color }} />
-                          <strong style={{ color }}>{getSeverityLabel(r.percentInfestation)}</strong>
-                          <span style={{ color: '#6b7280', marginLeft: 4 }}>({r.percentInfestation}%)</span>
-                        </div>
-                        <p><b>Crop:</b> {r.crop} {r.variety ? `— ${r.variety}` : ''}</p>
-                        <p><b>Pest:</b> {r.pests || '—'}</p>
-                        <p><b>Location:</b> {[r.municipality, r.province].filter(Boolean).join(', ') || '—'}</p>
-                        {r.areaAffected && <p><b>Area Affected:</b> {r.areaAffected} ha</p>}
-                        <p style={{ color: '#9ca3af', fontSize: 10, marginTop: 4 }}>{r.date || ''}</p>
-                      </div>
-                    </Popup>
-                  </Marker>
-                );
-              })}
+              {filtered.map(r => (
+                <RiskMarker
+                  key={r.id}
+                  report={r}
+                  isTarget={flyTo?.id === r.id}
+                  markerRefs={markerRefs}
+                />
+              ))}
             </MapContainer>
 
             {/* Empty state overlay on top of map */}
