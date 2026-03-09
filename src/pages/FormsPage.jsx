@@ -64,8 +64,8 @@ function DeleteSheet({ label, onConfirm, onClose }) {
     <Sheet onClose={onClose} maxH="auto">
       <div className="px-6 pb-8 pt-2">
         <div className="flex flex-col items-center gap-3 mb-6">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-            <Trash2 size={30} className="text-red-500" />
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)', border: '1px solid #fecaca' }}>
+            <Trash2 size={28} className="text-red-500" />
           </div>
           <p className="font-bold text-gray-800 text-lg">Delete Record?</p>
           <p className="text-sm text-gray-500 text-center leading-relaxed">
@@ -204,20 +204,20 @@ function RecordDetail({ record: r, type, onBack, onClose, onDeleted }) {
         {/* ── ACTION BUTTONS ── always visible below header ── */}
         <div className="px-4 py-3 border-b border-gray-100 shrink-0"
           style={{ background: '#f9fafb' }}>
-          <div className={`grid gap-2 ${hasCoords ? 'grid-cols-3' : 'grid-cols-2'}`}>
+          <div className={`grid gap-2 ${hasCoords ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2'}`}>
             {hasCoords && (
               <button onClick={handleViewOnMap}
                 className="flex flex-col items-center gap-1 py-3 rounded-2xl active:scale-95 transition-all"
-                style={{ background: '#E8F9FA' }}>
-                <Map size={18} style={{ color: '#0D5C6A' }} />
-                <span className="text-[10px] font-bold" style={{ color: '#0D5C6A' }}>View on Map</span>
+                style={{ background: '#f9e6c2' }}>
+                <Map size={18} style={{ color: '#4e7e44' }} />
+                <span className="text-[10px] font-bold" style={{ color: '#4e7e44' }}>View on Map</span>
               </button>
             )}
             <button onClick={handleEdit}
               className="flex flex-col items-center gap-1 py-3 rounded-2xl active:scale-95 transition-all"
-              style={{ background: '#E8F9FA' }}>
-              <Edit3 size={18} style={{ color: '#0D5C6A' }} />
-              <span className="text-[10px] font-bold" style={{ color: '#0D5C6A' }}>Edit</span>
+              style={{ background: '#f9e6c2' }}>
+              <Edit3 size={18} style={{ color: '#4e7e44' }} />
+              <span className="text-[10px] font-bold" style={{ color: '#4e7e44' }}>Edit</span>
             </button>
             <button onClick={() => setShowDelete(true)}
               className="flex flex-col items-center gap-1 py-3 rounded-2xl active:scale-95 transition-all bg-red-50">
@@ -319,25 +319,25 @@ function RecordsSheet({ type, onClose }) {
         {loading && (
           <div className="flex justify-center py-12">
             <div className="animate-spin w-7 h-7 border-2 rounded-full"
-              style={{ borderColor: '#0D5C6A', borderTopColor: 'transparent' }} />
+              style={{ borderColor: '#4e7e44', borderTopColor: 'transparent' }} />
           </div>
         )}
         {!loading && records.length === 0 && (
-          <div className="flex flex-col items-center py-14 gap-3">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: '#E8F9FA' }}>
-              <FileText size={24} style={{ color: '#0D5C6A' }} />
+          <div className="flex flex-col items-center py-14 gap-4">
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm" style={{ background: 'linear-gradient(135deg, #fdf8f0 0%, #f9e6c2 100%)', border: '1px solid rgba(150,209,131,0.3)' }}>
+              <FileText size={24} style={{ color: '#4e7e44' }} />
             </div>
-            <p className="text-sm font-semibold text-gray-500">No records yet</p>
-            <p className="text-xs text-gray-400">Submit a form to see records here.</p>
+            <p className="text-sm font-semibold text-gray-600">No records yet</p>
+            <p className="text-xs text-gray-500">Submit a form to see records here.</p>
           </div>
         )}
         {!loading && records.map(r => (
           <button key={r.id} onClick={() => setSelected(r)} className="record-row">
             <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
-              style={{ background: '#E8F9FA' }}>
-              {type === 'pest'    ? <MapPin        size={15} style={{ color: '#0D5C6A' }} /> :
-               type === 'request' ? <ClipboardList size={15} style={{ color: '#0D5C6A' }} /> :
-                                     <Star         size={15} style={{ color: '#0D5C6A' }} />}
+              style={{ background: '#f9e6c2' }}>
+              {type === 'pest'    ? <MapPin        size={15} style={{ color: '#4e7e44' }} /> :
+               type === 'request' ? <ClipboardList size={15} style={{ color: '#4e7e44' }} /> :
+                                     <Star         size={15} style={{ color: '#4e7e44' }} />}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-gray-800 truncate">
@@ -350,7 +350,7 @@ function RecordsSheet({ type, onClose }) {
                 <span className="text-[10px] text-gray-400">{fmtDate(r.createdAt || r.date)}</span>
                 {type === 'pest' && r.crop && (
                   <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full"
-                    style={{ background: '#E8F9FA', color: '#0D5C6A' }}>{r.crop}</span>
+                    style={{ background: '#f9e6c2', color: '#4e7e44' }}>{r.crop}</span>
                 )}
                 {type === 'pest' && <SeverityBadge pct={r.percentInfestation} />}
               </div>
@@ -365,9 +365,9 @@ function RecordsSheet({ type, onClose }) {
 
 /* ── Forms menu ──────────────────────────────────── */
 const FORM_DEFS = [
-  { path: 'pest-report',         type: 'pest',    title: 'Pest Report',                subtitle: 'Surveillance & field data',   Icon: FileText,     color: '#0D5C6A', num: 1 },
-  { path: 'request-form',        type: 'request', title: 'Request Form',               subtitle: 'Intervention & action taken', Icon: ClipboardList, color: '#129EAC', num: 2 },
-  { path: 'satisfaction-survey', type: 'survey',  title: 'Client Satisfaction Survey', subtitle: 'Feedback & service rating',   Icon: Star,         color: '#14B8C4', num: 3 },
+  { path: 'pest-report',         type: 'pest',    title: 'Pest Report',                subtitle: 'Surveillance & field data',   Icon: FileText,     color: '#4e7e44', num: 1 },
+  { path: 'request-form',        type: 'request', title: 'Request Form',               subtitle: 'Intervention & action taken', Icon: ClipboardList, color: '#629e53', num: 2 },
+  { path: 'satisfaction-survey', type: 'survey',  title: 'Client Satisfaction Survey', subtitle: 'Feedback & service rating',   Icon: Star,         color: '#96d183', num: 3 },
 ];
 
 function FormsMenu() {
@@ -387,23 +387,21 @@ function FormsMenu() {
   useEffect(() => { loadCounts(); }, []);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full min-h-0 overflow-hidden">
       {/* Header */}
-      <div className="px-4 pt-10 pb-5"
-        style={{ background: 'linear-gradient(135deg, #072F36, #0D5C6A)' }}>
+      <div className="page-header">
         <div className="flex items-center gap-2 mb-1">
-          <img src="/PSDSMLOGO.png" alt="" className="w-7 h-7 object-contain" />
-          <h1 className="text-white font-bold text-base">Data Entry Forms</h1>
+          <img src="/DALOGO.jpg" alt="" className="w-7 h-7 rounded-full object-cover" />
+          <h1 className="header-title">Data Entry Forms</h1>
         </div>
-        <p className="text-xs" style={{ color: '#80E8EA' }}>Fill out or manage submitted records</p>
+        <p className="header-subtitle">Fill out or manage submitted records</p>
       </div>
 
-      <div className="screen-content px-4 pb-4 pt-4 space-y-3">
+      <div className="screen-content content-container pb-4 pt-4 space-y-3">
         {/* Offline hint */}
-        <div className="flex items-center gap-2 border rounded-xl px-4 py-3"
-          style={{ background: '#E8F9FA', borderColor: '#AAECED' }}>
-          <CheckCircle size={15} style={{ color: '#0D5C6A' }} className="shrink-0" />
-          <p className="text-xs font-medium" style={{ color: '#0A4550' }}>
+        <div className="alert-success">
+          <CheckCircle size={15} className="shrink-0" />
+          <p className="text-xs font-medium">
             Offline supported — data auto-syncs when connected.
           </p>
         </div>
@@ -411,9 +409,9 @@ function FormsMenu() {
         {FORM_DEFS.map(({ path, type, title, subtitle, Icon, color, num }) => (
           <div key={path} className="card overflow-hidden p-0">
             <div className="flex items-center gap-3 px-4 pt-4 pb-3">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-sm"
                 style={{ background: color }}>
-                <Icon size={20} className="text-white" />
+                <Icon size={22} className="text-white" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Form {num}</p>
@@ -427,12 +425,12 @@ function FormsMenu() {
             </div>
             <div className="flex border-t border-gray-100">
               <button onClick={() => setSheetType(type)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold border-r border-gray-100 active:bg-gray-50"
-                style={{ color: '#0D5C6A' }}>
+                className="flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold border-r border-gray-100 active:bg-gray-50 transition-colors"
+                style={{ color: '#4e7e44' }}>
                 <Eye size={14} /> View Records
               </button>
               <button onClick={() => navigate(path)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold text-white active:opacity-80"
+                className="flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold text-white active:scale-[0.98] transition-all"
                 style={{ background: color }}>
                 <Plus size={14} /> New Entry
               </button>

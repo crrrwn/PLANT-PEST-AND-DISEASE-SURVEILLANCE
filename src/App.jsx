@@ -30,7 +30,7 @@ function AppRoutes() {
 export default function App() {
   return (
     <div className="app-shell">
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <AuthProvider>
           <AppRoutes />
         </AuthProvider>

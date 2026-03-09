@@ -25,7 +25,7 @@ const CROP_OPTS = ['All Crops','Rice','Corn','Sibuyas','Mango'];
 const YEARS     = ['2023','2024','2025','2026'];
 
 const CROP_COLORS = {
-  Rice:    { bg: 'rgba(13,92,106,0.75)',  border: '#0D5C6A' },
+  Rice:    { bg: 'rgba(78,126,68,0.75)',  border: '#4e7e44' },
   Corn:    { bg: 'rgba(202,138,4,0.75)',  border: '#ca8a04' },
   Sibuyas: { bg: 'rgba(124,58,237,0.75)', border: '#7c3aed' },
   Mango:   { bg: 'rgba(234,88,12,0.75)',  border: '#ea580c' },
@@ -40,7 +40,7 @@ const BASE_CHART = {
   plugins: { legend: { display: false } },
   scales: {
     x: { grid: { display: false }, ticks: { font: { size: 9 } } },
-    y: { grid: { color: '#e8f9fa' }, ticks: { font: { size: 9 } }, beginAtZero: true },
+    y: { grid: { color: '#f9e6c2' }, ticks: { font: { size: 9 } }, beginAtZero: true },
   },
 };
 
@@ -149,8 +149,8 @@ function StarDisplay({ value, max = 5, size = 14 }) {
         <Star
           key={i}
           size={size}
-          fill={i < Math.round(value) ? '#14B8C4' : 'none'}
-          stroke={i < Math.round(value) ? '#14B8C4' : '#d1d5db'}
+          fill={i < Math.round(value) ? '#96d183' : 'none'}
+          stroke={i < Math.round(value) ? '#96d183' : '#d1d5db'}
           strokeWidth={1.5}
         />
       ))}
@@ -160,7 +160,7 @@ function StarDisplay({ value, max = 5, size = 14 }) {
 
 function RatingBar({ label, value }) {
   const pct = (value / 5) * 100;
-  const color = value >= 4 ? '#22c55e' : value >= 3 ? '#14B8C4' : value >= 2 ? '#f97316' : '#ef4444';
+  const color = value >= 4 ? '#22c55e' : value >= 3 ? '#96d183' : value >= 2 ? '#f97316' : '#ef4444';
   return (
     <div className="flex items-center gap-2 py-1.5 border-b border-gray-50 last:border-0">
       <span className="text-xs text-gray-600 w-20 shrink-0">{label}</span>
@@ -177,13 +177,13 @@ function RatingBar({ label, value }) {
 
 function EmptyCard({ icon: Icon, title, sub }) {
   return (
-    <div className="flex flex-col items-center py-10 gap-3">
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: '#E8F9FA' }}>
-        <Icon size={22} style={{ color: '#0D5C6A' }} />
+    <div className="flex flex-col items-center py-12 gap-4">
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm" style={{ background: 'linear-gradient(135deg, #fdf8f0 0%, #f9e6c2 100%)', border: '1px solid rgba(150,209,131,0.3)' }}>
+        <Icon size={24} style={{ color: '#4e7e44' }} />
       </div>
       <div className="text-center">
-        <p className="text-sm font-semibold text-gray-600">{title}</p>
-        <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
+        <p className="text-sm font-semibold text-gray-700">{title}</p>
+        <p className="text-xs text-gray-500 mt-1 leading-relaxed max-w-[200px]">{sub}</p>
       </div>
     </div>
   );
@@ -232,8 +232,8 @@ export default function DashboardPage() {
     datasets: activeCrops.map(c => ({
       label: c,
       data: pest.monthlyCounts[c] || Array(12).fill(0),
-      borderColor: CROP_COLORS[c]?.border || '#0D5C6A',
-      backgroundColor: (CROP_COLORS[c]?.border || '#0D5C6A') + '22',
+      borderColor: CROP_COLORS[c]?.border || '#4e7e44',
+      backgroundColor: (CROP_COLORS[c]?.border || '#4e7e44') + '22',
       fill: true, tension: 0.4, pointRadius: 3, borderWidth: 2,
     })),
   };
@@ -259,9 +259,9 @@ export default function DashboardPage() {
     datasets: [{
       label: 'Average Rating',
       data: ratings.avgs,
-      backgroundColor: 'rgba(20,184,196,0.18)',
-      borderColor: '#14B8C4',
-      pointBackgroundColor: '#0D5C6A',
+      backgroundColor: 'rgba(150,209,131,0.12)',
+      borderColor: '#96d183',
+      pointBackgroundColor: '#4e7e44',
       pointBorderColor: '#fff',
       borderWidth: 2,
       pointRadius: 4,
@@ -271,7 +271,7 @@ export default function DashboardPage() {
     labels: Object.keys(ratings.providerMap),
     datasets: [{
       data: Object.values(ratings.providerMap),
-      backgroundColor: ['#0D5C6A','#129EAC','#14B8C4'],
+      backgroundColor: ['#4e7e44','#629e53','#96d183'],
       borderWidth: 0, hoverOffset: 8,
     }],
   };
@@ -280,29 +280,26 @@ export default function DashboardPage() {
     datasets: [{
       label: 'Surveys',
       data: ratings.monthlySurveys,
-      backgroundColor: 'rgba(20,184,196,0.7)',
+      backgroundColor: 'rgba(150,209,131,0.6)',
       borderRadius: 6,
     }],
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full min-h-0 overflow-hidden">
       {/* ── Header ── */}
-      <div className="px-4 pt-10 pb-3"
-        style={{ background: 'linear-gradient(135deg, #072F36, #0D5C6A)' }}>
+      <div className="page-header">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <img src="/PSDSMLOGO.png" alt="" className="w-7 h-7 object-contain" />
+            <img src="/DALOGO.jpg" alt="" className="w-7 h-7 rounded-full object-cover" />
             <div>
-              <h1 className="text-white font-bold text-base leading-none">Analytics & Trends</h1>
-              <p className="text-xs" style={{ color: '#80E8EA' }}>
+              <h1 className="header-title">Analytics & Trends</h1>
+              <p className="header-subtitle">
                 {loading ? 'Loading…' : `${pestReports.length} reports · ${surveys.length} surveys`}
               </p>
             </div>
           </div>
-          <button onClick={loadData}
-            className="p-2 rounded-xl border border-white/20"
-            style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+          <button onClick={loadData} className="header-btn">
             <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
           </button>
         </div>
@@ -316,7 +313,7 @@ export default function DashboardPage() {
             <button key={key} onClick={() => setActiveTab(key)}
               className="flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all"
               style={activeTab === key
-                ? { background: 'white', color: '#0D5C6A' }
+                ? { background: 'white', color: '#4e7e44' }
                 : { color: 'rgba(255,255,255,0.65)' }}>
               {label}
             </button>
@@ -326,21 +323,25 @@ export default function DashboardPage() {
 
       {/* ── Loading ── */}
       {loading && (
-        <div className="flex flex-col items-center justify-center flex-1 gap-3" style={{ background: '#f4f8f9' }}>
-          <RefreshCw className="animate-spin" size={28} style={{ color: '#0D5C6A' }} />
-          <p className="text-sm font-medium" style={{ color: '#0D5C6A' }}>Loading analytics…</p>
+        <div className="flex flex-col items-center justify-center flex-1 gap-4" style={{ background: 'linear-gradient(180deg, #fdf8f0 0%, #f9e6c2 100%)' }}>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(78,126,68,0.1)' }}>
+            <RefreshCw className="animate-spin" size={28} style={{ color: '#4e7e44' }} />
+          </div>
+          <p className="text-sm font-semibold" style={{ color: '#4e7e44' }}>Loading analytics…</p>
         </div>
       )}
 
       {/* ── Error ── */}
       {!loading && fetchError && (
-        <div className="flex flex-col items-center justify-center flex-1 gap-3 px-8 text-center" style={{ background: '#f4f8f9' }}>
-          <AlertCircle size={32} className="text-red-400" />
+        <div className="flex flex-col items-center justify-center flex-1 gap-4 px-8 text-center" style={{ background: 'linear-gradient(180deg, #fdf8f0 0%, #f9e6c2 100%)' }}>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(239,68,68,0.1)' }}>
+            <AlertCircle size={32} className="text-red-500" />
+          </div>
           <p className="text-sm font-semibold text-gray-700">Could not load data</p>
-          <p className="text-xs text-gray-400">Check your Firestore rules and internet connection.</p>
+          <p className="text-xs text-gray-500">Check your Firestore rules and internet connection.</p>
           <button onClick={loadData}
-            className="px-5 py-2 rounded-xl text-white text-sm font-semibold mt-1"
-            style={{ background: '#0D5C6A' }}>
+            className="mt-1 px-6 py-2.5 rounded-xl text-white text-sm font-semibold shadow-md"
+            style={{ background: 'var(--header-gradient)' }}>
             Retry
           </button>
         </div>
@@ -348,16 +349,16 @@ export default function DashboardPage() {
 
       {/* ── Content ── */}
       {!loading && !fetchError && (
-        <div className="screen-content px-4 pb-6 pt-4 space-y-4">
+        <div className="screen-content content-container pb-6 pt-4 space-y-4">
 
           {/* ── Filters ── */}
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {[
               { val: location, opts: LOCATIONS, set: setLocation },
               ...(activeTab === 'pest' ? [{ val: crop, opts: CROP_OPTS, set: setCrop }] : []),
               { val: year,     opts: YEARS,      set: setYear },
             ].map(({ val, opts, set }, i) => (
-              <div key={i} className="relative flex-1">
+              <div key={i} className="relative flex-1 min-w-[120px]">
                 <select value={val} onChange={e => set(e.target.value)}
                   className="w-full bg-white border border-gray-200 rounded-xl px-2 py-2 text-xs font-medium text-gray-700 appearance-none focus:outline-none">
                   {opts.map(o => <option key={o}>{o}</option>)}
@@ -379,17 +380,17 @@ export default function DashboardPage() {
             ) : (
               <>
                 {/* Stat cards */}
-                <div className="flex gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {[
-                    { label:'Total Reports', value: pest.total,                   Icon:FileText,      bg:'#0D5C6A' },
+                    { label:'Total Reports', value: pest.total,                   Icon:FileText,      bg:'#4e7e44' },
                     { label:'High Risk',     value: pest.sevCounts['High Risk'],   Icon:AlertTriangle, bg:'#ef4444' },
                     { label:'Crops',         value: activeCrops.filter(c=>(pest.monthlyCounts[c]||[]).some(v=>v>0)).length, Icon:Leaf, bg:'#ca8a04' },
                   ].map(({ label, value, Icon, bg }) => (
-                    <div key={label} className="card flex-1 min-w-0">
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-2" style={{ background: bg }}>
-                        <Icon size={17} className="text-white" />
+                    <div key={label} className="stat-card">
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-2.5 shadow-sm" style={{ background: bg }}>
+                        <Icon size={18} className="text-white" />
                       </div>
-                      <p className="text-2xl font-bold text-gray-800">{value}</p>
+                      <p className="text-2xl font-extrabold text-gray-800">{value}</p>
                       <p className="text-xs text-gray-500 font-medium mt-0.5 truncate">{label}</p>
                     </div>
                   ))}
@@ -405,7 +406,7 @@ export default function DashboardPage() {
                     <div className="flex gap-2 flex-wrap justify-end">
                       {activeCrops.map(c => (
                         <div key={c} className="flex items-center gap-1">
-                          <div className="w-2 h-2 rounded-full" style={{ background: CROP_COLORS[c]?.border || '#0D5C6A' }} />
+                          <div className="w-2 h-2 rounded-full" style={{ background: CROP_COLORS[c]?.border || '#4e7e44' }} />
                           <span className="text-[9px] text-gray-500">{c}</span>
                         </div>
                       ))}
@@ -426,7 +427,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Doughnut + breakdown */}
-                <div className="flex gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="card flex-1">
                     <h3 className="text-xs font-bold text-gray-700 mb-2">Severity</h3>
                     {totalSev > 0 ? (
@@ -473,8 +474,8 @@ export default function DashboardPage() {
                       }[sev];
                       return (
                         <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
-                          <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style={{ background:'#E8F9FA' }}>
-                            <span className="text-[10px] font-bold" style={{ color:'#0D5C6A' }}>{i+1}</span>
+                          <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style={{ background:'#f9e6c2' }}>
+                            <span className="text-[10px] font-bold" style={{ color:'#4e7e44' }}>{i+1}</span>
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-xs font-semibold text-gray-800 truncate">{p.name}</p>
@@ -505,19 +506,19 @@ export default function DashboardPage() {
             ) : (
               <>
                 {/* Overview stat cards */}
-                <div className="flex gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {[
-                    { label:'Surveys',       value: ratings.total,                                Icon:FileText, bg:'#0D5C6A' },
-                    { label:'Avg Rating',    value: ratings.overall > 0 ? `${ratings.overall}★` : '—', Icon:Star, bg:'#14B8C4' },
+                    { label:'Surveys',       value: ratings.total,                                Icon:FileText, bg:'#4e7e44' },
+                    { label:'Avg Rating',    value: ratings.overall > 0 ? `${ratings.overall}★` : '—', Icon:Star, bg:'#96d183' },
                     { label:'On-Time',       value: ratings.onTime + ratings.notOnTime > 0
                                                       ? `${Math.round((ratings.onTime/(ratings.onTime+ratings.notOnTime))*100)}%`
                                                       : '—',                                      Icon:Clock, bg:'#22c55e' },
                   ].map(({ label, value, Icon, bg }) => (
-                    <div key={label} className="card flex-1 min-w-0">
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-2" style={{ background: bg }}>
-                        <Icon size={17} className="text-white" />
+                    <div key={label} className="stat-card">
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-2.5 shadow-sm" style={{ background: bg }}>
+                        <Icon size={18} className="text-white" />
                       </div>
-                      <p className="text-xl font-bold text-gray-800 truncate">{value}</p>
+                      <p className="text-xl font-extrabold text-gray-800 truncate">{value}</p>
                       <p className="text-xs text-gray-500 font-medium mt-0.5 truncate">{label}</p>
                     </div>
                   ))}
@@ -531,7 +532,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex items-center gap-4 py-3 border-b border-gray-50 mb-3">
                     <div className="flex flex-col items-center">
-                      <span className="text-4xl font-extrabold" style={{ color: '#0D5C6A' }}>
+                      <span className="text-4xl font-extrabold" style={{ color: '#4e7e44' }}>
                         {ratings.overall > 0 ? ratings.overall : '—'}
                       </span>
                       <span className="text-[10px] text-gray-400 mt-0.5">out of 5.0</span>
@@ -570,8 +571,8 @@ export default function DashboardPage() {
                           r: {
                             min: 0, max: 5,
                             ticks: { stepSize: 1, font: { size: 9 }, color: '#9ca3af' },
-                            grid: { color: '#e8f9fa' },
-                            pointLabels: { font: { size: 10 }, color: '#0D5C6A' },
+                            grid: { color: '#f9e6c2' },
+                            pointLabels: { font: { size: 10 }, color: '#4e7e44' },
                           },
                         },
                       }} />
@@ -589,7 +590,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* ── Service provider + On-time ── */}
-                <div className="flex gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {/* Provider donut */}
                   <div className="card flex-1">
                     <h3 className="text-xs font-bold text-gray-700 mb-2">Service Provider</h3>
@@ -604,7 +605,7 @@ export default function DashboardPage() {
                         <div className="flex gap-2 justify-center mt-2 flex-wrap">
                           {Object.entries(ratings.providerMap).filter(([,v])=>v>0).map(([k,v], i) => (
                             <div key={k} className="flex items-center gap-1">
-                              <div className="w-2 h-2 rounded-full" style={{ background: ['#0D5C6A','#129EAC','#14B8C4'][i] }}/>
+                              <div className="w-2 h-2 rounded-full" style={{ background: ['#4e7e44','#629e53','#96d183'][i] }}/>
                               <span className="text-[9px] text-gray-500">{k} ({v})</span>
                             </div>
                           ))}
@@ -668,7 +669,7 @@ export default function DashboardPage() {
                       return (
                         <div key={s.id||i} className="flex items-start gap-3 py-2.5 border-b border-gray-50 last:border-0">
                           <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-bold"
-                            style={{ background: '#0D5C6A' }}>
+                            style={{ background: '#4e7e44' }}>
                             {(s.name||'?')[0].toUpperCase()}
                           </div>
                           <div className="flex-1 min-w-0">
@@ -679,7 +680,7 @@ export default function DashboardPage() {
                           <div className="text-right shrink-0">
                             {avg ? (
                               <>
-                                <p className="text-sm font-extrabold" style={{ color:'#0D5C6A' }}>{avg}</p>
+                                <p className="text-sm font-extrabold" style={{ color:'#4e7e44' }}>{avg}</p>
                                 <StarDisplay value={parseFloat(avg)} size={10} />
                               </>
                             ) : (

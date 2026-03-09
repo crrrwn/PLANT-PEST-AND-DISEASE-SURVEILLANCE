@@ -87,10 +87,10 @@ function mkHighlightIcon(color) {
 function EmptyMapOverlay() {
   return (
     <div className="absolute inset-0 z-[400] flex items-end justify-center pb-20 pointer-events-none">
-      <div className="pointer-events-auto mx-4 bg-white rounded-2xl shadow-xl border border-gray-100 px-5 py-4 flex items-center gap-3 max-w-xs">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-          style={{ background: '#E8F9FA' }}>
-          <MapPin size={20} style={{ color: '#0D5C6A' }} />
+      <div className="pointer-events-auto mx-4 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-100/80 px-5 py-4 flex items-center gap-3 max-w-xs">
+        <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-sm"
+          style={{ background: 'linear-gradient(135deg, #fdf8f0 0%, #f9e6c2 100%)', border: '1px solid rgba(150,209,131,0.3)' }}>
+          <MapPin size={22} style={{ color: '#4e7e44' }} />
         </div>
         <div>
           <p className="text-sm font-bold text-gray-800">No reports yet</p>
@@ -149,35 +149,25 @@ export default function MapPage() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full min-h-0 overflow-hidden">
       {/* Header */}
-      <div className="px-4 pt-10 pb-3 z-10"
-        style={{ background: 'linear-gradient(135deg, #072F36, #0D5C6A)' }}>
+      <div className="page-header z-10">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <img src="/PSDSMLOGO.png" alt="" className="w-7 h-7 object-contain" />
+            <img src="/DALOGO.jpg" alt="" className="w-7 h-7 rounded-full object-cover" />
             <div>
-              <h1 className="text-white font-bold text-base leading-none">Surveillance Map</h1>
-              <p className="text-xs" style={{ color: '#80E8EA' }}>MIMAROPA · Region 4B</p>
+              <h1 className="header-title">Surveillance Map</h1>
+              <p className="header-subtitle">MIMAROPA · Region 4B</p>
             </div>
           </div>
           <div className="flex gap-2">
-            <button
-              onClick={loadReports}
-              className="p-2 rounded-xl border border-white/20"
-              style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+            <button onClick={loadReports} className="header-btn">
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
             </button>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="p-2 rounded-xl border border-white/20"
-              style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+            <button onClick={() => setShowFilters(!showFilters)} className="header-btn">
               <Filter size={16} />
             </button>
-            <button
-              onClick={() => setShowLegend(!showLegend)}
-              className="p-2 rounded-xl border border-white/20"
-              style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+            <button onClick={() => setShowLegend(!showLegend)} className="header-btn">
               <Layers size={16} />
             </button>
           </div>
@@ -206,7 +196,7 @@ export default function MapPage() {
                 onClick={() => { setCropFilter(c); setShowFilters(false); }}
                 className="shrink-0 px-3 py-1 rounded-full text-xs font-semibold transition-all"
                 style={cropFilter === c
-                  ? { background: 'white', color: '#0D5C6A' }
+                  ? { background: 'white', color: '#4e7e44' }
                   : { background: 'rgba(255,255,255,0.18)', color: 'white' }}>
                 {c}
               </button>
@@ -218,21 +208,25 @@ export default function MapPage() {
       {/* Map area */}
       <div className="flex-1 relative">
         {loading ? (
-          <div className="flex items-center justify-center h-full" style={{ background: '#E8F9FA' }}>
-            <div className="flex flex-col items-center gap-3">
-              <RefreshCw className="animate-spin" size={28} style={{ color: '#0D5C6A' }} />
-              <p className="text-sm font-medium" style={{ color: '#0D5C6A' }}>Loading map data…</p>
+          <div className="flex items-center justify-center h-full" style={{ background: 'linear-gradient(180deg, #fdf8f0 0%, #f9e6c2 100%)' }}>
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(78,126,68,0.1)' }}>
+                <RefreshCw className="animate-spin" size={28} style={{ color: '#4e7e44' }} />
+              </div>
+              <p className="text-sm font-semibold" style={{ color: '#4e7e44' }}>Loading map data…</p>
             </div>
           </div>
         ) : fetchError ? (
-          <div className="flex items-center justify-center h-full px-8" style={{ background: '#E8F9FA' }}>
-            <div className="flex flex-col items-center gap-3 text-center">
-              <AlertCircle size={36} className="text-red-400" />
+          <div className="flex items-center justify-center h-full px-8" style={{ background: 'linear-gradient(180deg, #fdf8f0 0%, #f9e6c2 100%)' }}>
+            <div className="flex flex-col items-center gap-4 text-center">
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(239,68,68,0.1)' }}>
+                <AlertCircle size={32} className="text-red-500" />
+              </div>
               <p className="text-sm font-semibold text-gray-700">Could not load reports</p>
-              <p className="text-xs text-gray-400">Check your internet connection and Firestore rules, then tap retry.</p>
+              <p className="text-xs text-gray-500">Check your internet connection and Firestore rules, then tap retry.</p>
               <button onClick={loadReports}
-                className="mt-1 px-5 py-2 rounded-xl text-white text-sm font-semibold"
-                style={{ background: '#0D5C6A' }}>
+                className="mt-1 px-6 py-2.5 rounded-xl text-white text-sm font-semibold shadow-md"
+                style={{ background: 'var(--header-gradient)' }}>
                 Retry
               </button>
             </div>
@@ -292,7 +286,7 @@ export default function MapPage() {
 
             {/* Legend */}
             {showLegend && (
-              <div className="absolute top-3 right-3 z-[500] bg-white rounded-2xl shadow-xl p-3 border border-gray-100 w-44">
+              <div className="absolute top-3 right-3 z-[500] bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-3 border border-gray-100/80 w-44">
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-xs font-bold text-gray-700">Severity Legend</p>
                   <button onClick={() => setShowLegend(false)} className="text-gray-400 text-xs">✕</button>
@@ -310,8 +304,8 @@ export default function MapPage() {
             {cropFilter !== 'All' && (
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[400]">
                 <button onClick={() => setCropFilter('All')}
-                  className="flex items-center gap-2 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg"
-                  style={{ background: '#0D5C6A' }}>
+                  className="flex items-center gap-2 text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg active:scale-95 transition-transform"
+                  style={{ background: 'var(--header-gradient)', boxShadow: '0 4px 14px rgba(78,126,68,0.4)' }}>
                   <MapPin size={12} />
                   {cropFilter} only · Tap to clear
                 </button>

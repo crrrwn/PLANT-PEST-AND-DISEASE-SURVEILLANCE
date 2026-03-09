@@ -125,8 +125,8 @@ export default function PestReportForm() {
 
   if (status === 'success') return (
     <div className="flex flex-col items-center justify-center h-full bg-white px-8 gap-4">
-      <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background:'#E8F9FA' }}>
-        <CheckCircle size={44} style={{ color:'#0D5C6A' }} />
+      <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background:'#f9e6c2' }}>
+        <CheckCircle size={44} style={{ color:'#4e7e44' }} />
       </div>
       <h2 className="text-xl font-bold text-gray-800">
         {editMode ? 'Record Updated!' : 'Report Submitted!'}
@@ -138,29 +138,29 @@ export default function PestReportForm() {
   );
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center gap-3 px-4 pt-10 pb-4"
-        style={{ background:'linear-gradient(135deg,#072F36,#0D5C6A)' }}>
+    <div className="flex flex-col h-full min-h-0 overflow-hidden">
+      <div className="flex items-center gap-3 page-header"
+        style={{ background:'linear-gradient(135deg,#3d6538,#4e7e44)' }}>
         <button onClick={() => navigate('/forms')} className="p-2 rounded-xl" style={{ background:'rgba(255,255,255,0.12)' }}>
           <ChevronLeft size={20} className="text-white" />
         </button>
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color:'#80E8EA' }}>
+          <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color:'#b8e5a8' }}>
             {editMode ? 'EDITING — Form 1' : 'Form 1'}
           </p>
           <h1 className="text-white font-bold text-base">Pest Report</h1>
         </div>
         {editMode && (
           <span className="ml-auto text-[10px] font-bold px-2.5 py-1 rounded-full"
-            style={{ background:'rgba(255,255,255,0.15)', color:'#AAECED' }}>
+            style={{ background:'rgba(255,255,255,0.15)', color:'#96d183' }}>
             EDIT MODE
           </span>
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="screen-content px-4 pb-6 pt-4 space-y-4">
+      <form onSubmit={handleSubmit} className="screen-content content-container pb-6 pt-4 space-y-4">
         {status === 'error' && (
-          <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+          <div className="alert-error">
             <AlertCircle size={16} className="text-red-500 shrink-0" />
             <p className="text-red-600 text-sm">{errMsg}</p>
           </div>
@@ -180,7 +180,7 @@ export default function PestReportForm() {
           </div>
           <button type="button" onClick={getGPS} disabled={gpsLoad}
             className="w-full flex items-center justify-center gap-2 border-2 border-dashed py-2.5 rounded-xl text-sm font-semibold transition-colors"
-            style={{ borderColor:'#129EAC', color:'#0D5C6A' }}>
+            style={{ borderColor:'#629e53', color:'#4e7e44' }}>
             {gpsLoad ? <><Loader size={15} className="animate-spin" />Getting location…</>
                      : <><Crosshair size={15} />Auto-detect GPS Location</>}
           </button>
@@ -189,7 +189,7 @@ export default function PestReportForm() {
               {PROVINCES.map(p => <option key={p}>{p}</option>)}
             </select>
           </F>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <F label="Barangay">
               {hasBarangayMunicipalityList ? (
                 <select
@@ -233,13 +233,13 @@ export default function PestReportForm() {
         </Section>
 
         <Section title="Crop Details">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <F label="Crop *">
               <input className="input-field" placeholder="e.g. Rice, Corn" value={form.crop} onChange={set('crop')} autoComplete="off" />
             </F>
             <F label="Variety"><input className="input-field" placeholder="NSIC RC222" value={form.variety} onChange={set('variety')} /></F>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <F label="Growth Stage">
               <input className="input-field" placeholder="e.g. Vegetative, Reproductive" value={form.growthStage} onChange={set('growthStage')} autoComplete="off" />
             </F>
@@ -248,7 +248,7 @@ export default function PestReportForm() {
         </Section>
 
         <Section title="Damage Assessment">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <F label="Area Planted (ha)"><input type="number" className="input-field" placeholder="0.00" step="0.01" value={form.areaPlanted} onChange={set('areaPlanted')} /></F>
             <F label="Area Affected (ha)"><input type="number" className="input-field" placeholder="0.00" step="0.01" value={form.areaAffected} onChange={set('areaAffected')} /></F>
           </div>
@@ -287,7 +287,7 @@ function Section({ title, children }) {
   return (
     <div className="card space-y-3">
       <h3 className="text-xs font-bold uppercase tracking-wide border-b pb-2"
-        style={{ color:'#0D5C6A', borderColor:'#AAECED' }}>{title}</h3>
+        style={{ color:'#4e7e44', borderColor:'#96d183' }}>{title}</h3>
       {children}
     </div>
   );

@@ -15,8 +15,8 @@ import { collection, getDocs } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 
 /* ─── helpers ─────────────────────────────────────── */
-const DARK = '#0D5C6A';
-const MID  = '#129EAC';
+const DARK = '#4e7e44';
+const MID  = '#629e53';
 
 function Modal({ title, onClose, children }) {
   return (
@@ -37,9 +37,9 @@ function StatusMsg({ type, msg }) {
   if (!msg) return null;
   const ok = type === 'success';
   return (
-    <div className={`flex items-center gap-2 rounded-xl px-4 py-3 mb-4 ${ok ? 'bg-teal-50 border border-teal-200' : 'bg-red-50 border border-red-200'}`}>
+    <div className={`mb-4 ${ok ? 'alert-success' : 'alert-error'}`}>
       {ok ? <CheckCircle size={15} style={{ color:DARK }} /> : <AlertCircle size={15} className="text-red-500" />}
-      <p className={`text-sm ${ok ? 'text-teal-800' : 'text-red-600'}`}>{msg}</p>
+      <p className={`text-sm ${ok ? '' : 'text-red-600'}`} style={ok ? { color: '#4e7e44' } : {}}>{msg}</p>
     </div>
   );
 }
@@ -162,9 +162,9 @@ function CacheSheet({ onClose }) {
   }, []);
 
   const items = [
-    { label:'Pest Reports',          key:'pestReports',         color:'#0D5C6A' },
-    { label:'Request Forms',         key:'requestForms',        color:'#129EAC' },
-    { label:'Satisfaction Surveys',  key:'satisfactionSurveys', color:'#14B8C4' },
+    { label:'Pest Reports',          key:'pestReports',         color:'#4e7e44' },
+    { label:'Request Forms',         key:'requestForms',        color:'#629e53' },
+    { label:'Satisfaction Surveys',  key:'satisfactionSurveys', color:'#96d183' },
   ];
   const total = Object.values(counts).reduce((a,b)=>a+b,0);
 
@@ -176,7 +176,7 @@ function CacheSheet({ onClose }) {
         </div>
       ) : (
         <div className="space-y-4">
-          <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background:'#E8F9FA' }}>
+          <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background:'#f9e6c2' }}>
             <Database size={20} style={{ color:DARK }} />
             <div>
               <p className="font-bold text-gray-800">{total} total records</p>
@@ -192,7 +192,7 @@ function CacheSheet({ onClose }) {
               <span className="text-lg font-bold" style={{ color }}>{counts[key]}</span>
             </div>
           ))}
-          <div className="p-3 border rounded-xl" style={{ borderColor:'#AAECED', background:'#E8F9FA' }}>
+          <div className="p-3 border rounded-xl" style={{ borderColor:'#96d183', background:'#f9e6c2' }}>
             <p className="text-xs text-gray-600 font-medium">
               🔄 Data automatically syncs to Firebase Firestore when internet is available.
               All records are stored locally while offline.
@@ -210,16 +210,16 @@ function AboutSheet({ onClose }) {
     <Modal title="About PSDSM" onClose={onClose}>
       <div className="space-y-4">
         <div className="flex flex-col items-center gap-3 py-4">
-          <img src="/PSDSM.png" alt="PSDSM" className="w-20 h-20 object-contain" />
+          <img src="/DALOGO.jpg" alt="PSDSM" className="w-20 h-20 rounded-full object-cover" />
           <div className="text-center">
             <h3 className="font-extrabold text-xl text-gray-800">PSDSM</h3>
             <p className="text-xs text-gray-500 mt-0.5">Plant Pest & Disease Surveillance Monitoring</p>
-            <span className="inline-block mt-2 text-[10px] font-bold px-3 py-1 rounded-full" style={{ background:'#E8F9FA', color:DARK }}>Version 1.0.0</span>
+            <span className="inline-block mt-2 text-[10px] font-bold px-3 py-1 rounded-full" style={{ background:'#f9e6c2', color:DARK }}>Version 1.0.0</span>
           </div>
         </div>
-        <div className="p-4 rounded-2xl" style={{ background:'#E8F9FA' }}>
+        <div className="p-4 rounded-2xl" style={{ background:'#f9e6c2' }}>
           <div className="flex items-center gap-3 mb-3">
-            <img src="/PSDSMLOGO.png" alt="DA" className="w-10 h-10 object-contain"/>
+            <img src="/DALOGO.jpg" alt="DA" className="w-10 h-10 rounded-full object-cover"/>
             <div>
               <p className="font-bold text-gray-800 text-sm">Department of Agriculture</p>
               <p className="text-xs text-gray-500">Regional Field Office — MIMAROPA</p>
@@ -303,9 +303,9 @@ function DeleteAccountSheet({ onClose, onLogout }) {
   return (
     <Modal title="Delete Account" onClose={onClose}>
       <div className="space-y-4">
-        <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4">
+        <div className="alert-error p-4">
           <AlertCircle size={20} className="text-red-500 shrink-0" />
-          <p className="text-sm text-red-700">This action is permanent. All your account data will be removed and cannot be recovered.</p>
+          <p className="text-sm">This action is permanent. All your account data will be removed and cannot be recovered.</p>
         </div>
         <StatusMsg {...status} />
         <div>
@@ -406,17 +406,14 @@ export default function ProfilePage() {
   ];
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full min-h-0 overflow-hidden">
       {/* Header */}
-      <div className="relative px-4 pt-10 pb-10 overflow-hidden"
-        style={{ background:'linear-gradient(145deg, #072F36 0%, #0D5C6A 60%, #129EAC 100%)' }}>
-        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full" style={{ background:'rgba(0,205,210,0.07)' }} />
-        <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full" style={{ background:'rgba(255,255,255,0.03)' }} />
+      <div className="relative page-header overflow-hidden" style={{ paddingBottom: '2.5rem' }}>
 
         <div className="flex flex-col items-center gap-3 relative z-10">
           <div className="relative">
-            <div className="w-20 h-20 rounded-full border-4 border-white/25 flex items-center justify-center shadow-2xl"
-              style={{ background:'rgba(255,255,255,0.15)', backdropFilter:'blur(12px)' }}>
+            <div className="w-20 h-20 rounded-full border-4 border-white/30 flex items-center justify-center shadow-xl"
+              style={{ background:'rgba(255,255,255,0.2)', backdropFilter:'blur(12px)' }}>
               <span className="text-white font-extrabold text-2xl">{initials}</span>
             </div>
             <button onClick={() => setSheet('edit')}
@@ -426,10 +423,10 @@ export default function ProfilePage() {
           </div>
           <div className="text-center">
             <h2 className="text-white font-bold text-xl leading-tight">{displayName}</h2>
-            <p className="text-xs mt-0.5" style={{ color:'#80E8EA' }}>{position}</p>
+            <p className="text-xs mt-0.5" style={{ color:'#b8e5a8' }}>{position}</p>
             <p className="text-[10px] mt-0.5" style={{ color:'rgba(255,255,255,0.45)' }}>{currentUser?.email}</p>
             <div className="flex items-center justify-center gap-1.5 mt-2">
-              <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: isOnline ? '#00CDD2':'#ef4444' }} />
+              <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: isOnline ? '#96d183':'#ef4444' }} />
               <span className="text-[10px] font-medium" style={{ color:'rgba(255,255,255,0.6)' }}>
                 {isOnline ? 'Online' : 'Offline Mode'}
               </span>
@@ -438,10 +435,12 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="screen-content px-4 pb-6 pt-4 space-y-4 -mt-3">
+      <div className="screen-content content-container pb-6 pt-8 space-y-4">
         {/* DA badge */}
         <div className="card flex items-center gap-3">
-          <img src="/PSDSMLOGO.png" alt="" className="w-12 h-12 object-contain" />
+          <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white shadow-md shrink-0">
+            <img src="/DALOGO.jpg" alt="" className="w-full h-full object-cover" />
+          </div>
           <div>
             <p className="text-xs font-bold text-gray-700">Department of Agriculture</p>
             <p className="text-xs text-gray-500">Regional Field Office — MIMAROPA</p>
@@ -453,13 +452,13 @@ export default function ProfilePage() {
         {MENU.map(({ group, items }) => (
           <div key={group}>
             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 mb-1.5">{group}</p>
-            <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+            <div className="bg-white rounded-2xl overflow-hidden border border-gray-100/80 shadow-[0_2px_8px_rgba(78,126,68,0.06)]">
               {items.map(({ Icon, label, sub, action, iconColor, danger }, i) => (
                 <button key={label} onClick={action}
                   className={`w-full flex items-center gap-3 px-4 py-3.5 active:bg-gray-50 transition-colors
                     ${i < items.length-1 ? 'border-b border-gray-50' : ''}`}>
                   <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ background: danger ? '#fee2e2' : '#E8F9FA' }}>
+                    style={{ background: danger ? '#fee2e2' : '#f9e6c2' }}>
                     <Icon size={17} style={{ color: danger ? '#ef4444' : (iconColor || DARK) }} />
                   </div>
                   <div className="flex-1 text-left">
@@ -475,7 +474,7 @@ export default function ProfilePage() {
 
         {/* Logout */}
         <button onClick={handleLogout} disabled={logging}
-          className="w-full flex items-center justify-center gap-2 bg-red-50 border border-red-200 text-red-600 font-semibold py-3.5 rounded-2xl active:scale-95 transition-all">
+          className="w-full flex items-center justify-center gap-2 font-semibold py-3.5 rounded-2xl active:scale-[0.98] transition-all border-2 border-red-300 bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-60">
           <LogOut size={18} />
           {logging ? 'Signing out…' : 'Sign Out'}
         </button>

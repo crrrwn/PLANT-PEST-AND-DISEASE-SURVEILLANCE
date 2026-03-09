@@ -36,30 +36,33 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
-      <div className="relative px-6 pt-14 pb-20 overflow-hidden"
-        style={{ background: 'linear-gradient(145deg, #072F36 0%, #0D5C6A 55%, #129EAC 100%)' }}>
-        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full" style={{ background: 'rgba(0,205,210,0.08)' }} />
-        <div className="flex items-center gap-3 mb-5 relative z-10">
-          <img src="/PSDSMLOGO.png" alt="Logo" className="w-10 h-10 object-contain" />
-          <p className="text-white/70 text-[10px] tracking-widest uppercase">DA · MIMAROPA Region 4B</p>
+    <div className="flex flex-col h-full min-h-0 bg-white w-full overflow-hidden">
+      {/* Hero header - mas compact, same as Login */}
+      <div className="relative px-4 sm:px-6 overflow-hidden page-header shrink-0"
+        style={{ paddingTop: 'max(3rem, env(safe-area-inset-top))', paddingBottom: '3.5rem' }}>
+        <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full opacity-40" style={{ background: 'radial-gradient(circle, rgba(150,209,131,0.4) 0%, transparent 70%)' }} />
+        <div className="flex items-center gap-2.5 mb-3 relative z-10">
+          <div className="w-9 h-9 rounded-full ring-2 ring-white/30 shadow-lg overflow-hidden">
+            <img src="/DALOGO.jpg" alt="Logo" className="w-full h-full object-cover" />
+          </div>
+          <p className="text-white/80 text-[9px] tracking-widest uppercase font-medium">DA · MIMAROPA Region 4B</p>
         </div>
-        <h1 className="text-white text-3xl font-extrabold relative z-10">Create Account</h1>
-        <p className="text-sm mt-1 relative z-10" style={{ color: '#80E8EA' }}>Register as authorized personnel</p>
+        <h1 className="text-white text-2xl font-extrabold relative z-10 tracking-tight">Create Account</h1>
+        <p className="text-xs mt-1 relative z-10 font-medium" style={{ color: '#b8e5a8' }}>Register as authorized personnel</p>
       </div>
 
-      <div className="flex-1 -mt-8 bg-white rounded-t-3xl px-6 pt-8 pb-6 overflow-y-auto screen-content"
-        style={{ background: 'white' }}>
+      <div className="flex-1 min-h-0 -mt-6 bg-white rounded-t-[2rem] px-4 sm:px-6 pt-10 pb-6 overflow-y-auto overflow-x-hidden thin-scroll shadow-[0_-8px_30px_rgba(0,0,0,0.06)]"
+        style={{ background: 'white', WebkitOverflowScrolling: 'touch' }}>
         {error && (
-          <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-4">
-            <AlertCircle size={16} className="text-red-500 shrink-0" />
-            <p className="text-red-600 text-sm">{error}</p>
+          <div className="alert-error mb-4">
+            <AlertCircle size={16} className="shrink-0" />
+            <p className="text-sm">{error}</p>
           </div>
         )}
         {success && (
-          <div className="flex items-center gap-2 bg-teal-50 border border-teal-200 rounded-xl px-4 py-3 mb-4">
-            <CheckCircle size={16} className="text-teal-600 shrink-0" />
-            <p className="text-teal-700 text-sm font-medium">Account created! Redirecting…</p>
+          <div className="alert-success mb-4">
+            <CheckCircle size={16} className="shrink-0" />
+            <p className="text-sm font-medium">Account created! Redirecting…</p>
           </div>
         )}
 
@@ -118,7 +121,7 @@ export default function RegisterPage() {
 
           <p className="text-center text-gray-500 text-sm">
             Already have an account?{' '}
-            <Link to="/login" className="font-semibold" style={{ color: '#0D5C6A' }}>Sign In</Link>
+            <Link to="/login" className="font-semibold" style={{ color: '#4e7e44' }}>Sign In</Link>
           </p>
         </form>
       </div>

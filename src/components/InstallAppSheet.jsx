@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Smartphone, CheckCircle } from 'lucide-react';
 
-const DARK = '#0D5C6A';
+const DARK = '#4e7e44';
 
 function Modal({ title, onClose, children }) {
   return (
@@ -48,7 +48,7 @@ export default function InstallAppSheet({ onClose }) {
   return (
     <Modal title="Install PSDSM App" onClose={onClose}>
       <div className="space-y-4">
-        <div className="flex items-center justify-center gap-3 p-4 rounded-2xl" style={{ background:'#E8F9FA' }}>
+        <div className="flex items-center justify-center gap-3 p-4 rounded-2xl" style={{ background:'#f9e6c2' }}>
           <Smartphone size={28} style={{ color:DARK }} />
           <div>
             <p className="font-bold text-gray-800">Add to Home Screen</p>
@@ -57,9 +57,9 @@ export default function InstallAppSheet({ onClose }) {
         </div>
 
         {installed ? (
-          <div className="flex items-center gap-2 p-4 bg-teal-50 border border-teal-200 rounded-xl">
+          <div className="flex items-center gap-2 p-4 rounded-xl" style={{ background:'#f9e6c2', border:'1px solid #96d183' }}>
             <CheckCircle size={20} style={{ color:DARK }} />
-            <p className="text-sm text-teal-800 font-medium">App is installed! Open it from your home screen.</p>
+            <p className="text-sm font-medium" style={{ color:'#4e7e44' }}>App is installed! Open it from your home screen.</p>
           </div>
         ) : (
           <>

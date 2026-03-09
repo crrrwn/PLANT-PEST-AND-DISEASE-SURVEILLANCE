@@ -33,36 +33,39 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
-      {/* Hero header */}
-      <div className="relative px-6 pt-14 pb-20 overflow-hidden"
-        style={{ background: 'linear-gradient(145deg, #072F36 0%, #0D5C6A 55%, #129EAC 100%)' }}>
-        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full" style={{ background: 'rgba(0,205,210,0.08)' }} />
-        <div className="absolute -bottom-10 -left-10 w-36 h-36 rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
+    <div className="flex flex-col h-full min-h-0 bg-white w-full overflow-hidden">
+      {/* Hero header - mas compact */}
+      <div className="relative px-4 sm:px-6 overflow-hidden page-header shrink-0"
+        style={{ paddingTop: 'max(3rem, env(safe-area-inset-top))', paddingBottom: '3.5rem' }}>
+        <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full opacity-40" style={{ background: 'radial-gradient(circle, rgba(150,209,131,0.4) 0%, transparent 70%)' }} />
+        <div className="absolute -bottom-12 -left-12 w-40 h-40 rounded-full opacity-30" style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)' }} />
 
-        <div className="flex items-center gap-3 mb-5 relative z-10">
-          <img src="/PSDSMLOGO.png" alt="Logo" className="w-10 h-10 object-contain" />
+        <div className="flex items-center gap-2.5 mb-3 relative z-10">
+          <div className="w-9 h-9 rounded-full object-cover ring-2 ring-white/30 shadow-lg overflow-hidden">
+            <img src="/DALOGO.jpg" alt="Logo" className="w-full h-full object-cover" />
+          </div>
           <div>
-            <p className="text-white/50 text-[9px] font-bold tracking-widest uppercase">Department of Agriculture</p>
-            <p className="text-white/70 text-[10px] tracking-widest uppercase">MIMAROPA · Region 4B</p>
+            <p className="text-white/60 text-[8px] font-bold tracking-[0.15em] uppercase">Department of Agriculture</p>
+            <p className="text-white/80 text-[9px] tracking-widest uppercase">MIMAROPA · Region 4B</p>
           </div>
         </div>
-        <h1 className="text-white text-3xl font-extrabold relative z-10">Welcome Back</h1>
-        <p className="text-sm mt-1 relative z-10" style={{ color: '#80E8EA' }}>
+        <h1 className="text-white text-2xl font-extrabold relative z-10 tracking-tight">Welcome Back</h1>
+        <p className="text-xs mt-1 relative z-10 font-medium" style={{ color: '#b8e5a8' }}>
           Sign in to your PSDSM account
         </p>
       </div>
 
-      {/* Card */}
-      <div className="flex-1 -mt-8 bg-white rounded-t-3xl px-6 pt-8 pb-6 flex flex-col overflow-y-auto">
+      {/* Card - scrollable container para makita lahat ng laman */}
+      <div className="flex-1 min-h-0 -mt-6 bg-white rounded-t-[2rem] px-4 sm:px-6 pt-10 pb-6 flex flex-col overflow-y-auto overflow-x-hidden thin-scroll shadow-[0_-8px_30px_rgba(0,0,0,0.06)]"
+        style={{ WebkitOverflowScrolling: 'touch' }}>
         {error && (
-          <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5">
-            <AlertCircle size={16} className="text-red-500 shrink-0" />
-            <p className="text-red-600 text-sm">{error}</p>
+          <div className="alert-error mb-5">
+            <AlertCircle size={16} className="shrink-0" />
+            <p className="text-sm">{error}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4 flex-1">
+        <form onSubmit={handleSubmit} className="space-y-4 shrink-0">
           <div>
             <label className="form-label">Email Address</label>
             <div className="relative">
@@ -86,7 +89,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div className="pt-2">
+          <div className="pt-1">
             <button type="submit" disabled={loading} className="btn-primary disabled:opacity-60">
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -101,15 +104,16 @@ export default function LoginPage() {
           </div>
         </form>
 
-        <div className="mt-auto pt-6 text-center space-y-2">
+        <div className="mt-auto pt-6 text-center space-y-2 shrink-0">
           <button type="button" onClick={() => setShowInstall(true)}
-            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-teal-200 text-teal-700 text-sm font-medium hover:bg-teal-50 transition-colors">
+            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border-2 border-[var(--brand-mid)] text-sm font-semibold transition-all hover:bg-[var(--brand-pale)] active:scale-[0.98]"
+            style={{ color: 'var(--brand-dark)', background: 'rgba(249,230,194,0.4)' }}>
             <Download size={16} />
             Install App (Add to Home Screen)
           </button>
           <p className="text-gray-500 text-sm">
             Don't have an account?{' '}
-            <Link to="/register" className="font-semibold" style={{ color: '#0D5C6A' }}>Register</Link>
+            <Link to="/register" className="font-semibold" style={{ color: '#4e7e44' }}>Register</Link>
           </p>
           <p className="text-gray-400 text-xs">Authorized DA/LGU Personnel & Technicians Only</p>
         </div>

@@ -66,8 +66,8 @@ export default function RequestForm() {
 
   if (status === 'success') return (
     <div className="flex flex-col items-center justify-center h-full bg-white px-8 gap-4">
-      <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background:'#E8F9FA' }}>
-        <CheckCircle size={44} style={{ color:'#0D5C6A' }} />
+      <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background:'#f9e6c2' }}>
+        <CheckCircle size={44} style={{ color:'#4e7e44' }} />
       </div>
       <h2 className="text-xl font-bold text-gray-800">{editMode ? 'Record Updated!' : 'Request Submitted!'}</h2>
       <p className="text-sm text-gray-500 text-center">
@@ -77,52 +77,52 @@ export default function RequestForm() {
   );
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center gap-3 px-4 pt-10 pb-4"
-        style={{ background:'linear-gradient(135deg,#0A4550,#129EAC)' }}>
+    <div className="flex flex-col h-full min-h-0 overflow-hidden">
+      <div className="flex items-center gap-3 page-header"
+        style={{ background:'linear-gradient(135deg,#3d6538,#629e53)' }}>
         <button onClick={() => navigate('/forms')} className="p-2 rounded-xl" style={{ background:'rgba(255,255,255,0.12)' }}>
           <ChevronLeft size={20} className="text-white" />
         </button>
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color:'#AAECED' }}>
+          <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color:'#96d183' }}>
             {editMode ? 'EDITING — Form 2' : 'Form 2'}
           </p>
           <h1 className="text-white font-bold text-base">Request Form</h1>
         </div>
         {editMode && (
           <span className="ml-auto text-[10px] font-bold px-2.5 py-1 rounded-full"
-            style={{ background:'rgba(255,255,255,0.15)', color:'#AAECED' }}>EDIT MODE</span>
+            style={{ background:'rgba(255,255,255,0.15)', color:'#96d183' }}>EDIT MODE</span>
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="screen-content px-4 pb-6 pt-4 space-y-4">
+      <form onSubmit={handleSubmit} className="screen-content content-container pb-6 pt-4 space-y-4">
         {status === 'error' && (
-          <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+          <div className="alert-error">
             <AlertCircle size={16} className="text-red-500 shrink-0" />
             <p className="text-red-600 text-sm">{errMsg}</p>
           </div>
         )}
 
-        <Section title="Tracking Details" accent="#129EAC">
-          <div className="grid grid-cols-3 gap-2">
+        <Section title="Tracking Details" accent="#629e53">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
             <div className="col-span-3"><F label="Reference No."><input className="input-field" placeholder="REF-2025-001" value={form.refNo} onChange={set('refNo')} /></F></div>
             <div className="col-span-2"><F label="Date *"><input type="date" className="input-field" value={form.date} onChange={set('date')} /></F></div>
             <F label="Time"><input type="time" className="input-field" value={form.time} onChange={set('time')} /></F>
           </div>
         </Section>
 
-        <Section title="Client Information" accent="#129EAC">
+        <Section title="Client Information" accent="#629e53">
           <F label="Name of Client / Company *"><input className="input-field" placeholder="Juan Dela Cruz / ABC Farms" value={form.clientName} onChange={set('clientName')} /></F>
           <F label="Address"><input className="input-field" placeholder="Complete address" value={form.address} onChange={set('address')} /></F>
           <F label="Contact No."><input type="tel" className="input-field" placeholder="09XXXXXXXXX" value={form.contactNo} onChange={set('contactNo')} /></F>
         </Section>
 
         <div className="card space-y-3">
-          <div className="flex items-center justify-between border-b pb-2" style={{ borderColor:'#AAECED' }}>
-            <h3 className="text-xs font-bold uppercase tracking-wide" style={{ color:'#129EAC' }}>BCAs / Services Requested</h3>
+          <div className="flex items-center justify-between border-b pb-2" style={{ borderColor:'#96d183' }}>
+            <h3 className="text-xs font-bold uppercase tracking-wide" style={{ color:'#629e53' }}>BCAs / Services Requested</h3>
             <button type="button" onClick={addItem}
               className="flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg"
-              style={{ color:'#0D5C6A', background:'#E8F9FA' }}>
+              style={{ color:'#4e7e44', background:'#f9e6c2' }}>
               <Plus size={12} />Add Row
             </button>
           </div>
@@ -134,7 +134,7 @@ export default function RequestForm() {
                   <button type="button" onClick={() => removeItem(idx)} className="text-red-400"><Trash2 size={14}/></button>
                 )}
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <F label="Quantity"><input type="number" className="input-field" placeholder="0" value={item.quantity} onChange={setItem(idx,'quantity')} /></F>
                 <F label="Type of BCA / Service">
                   <input className="input-field" placeholder="e.g. Bio-control agents, FFS" value={item.service} onChange={setItem(idx,'service')} autoComplete="off" />
@@ -147,16 +147,16 @@ export default function RequestForm() {
           ))}
         </div>
 
-        <Section title="Received By" accent="#129EAC">
-          <div className="grid grid-cols-2 gap-2">
+        <Section title="Received By" accent="#629e53">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <F label="Name"><input className="input-field" placeholder="Full name" value={form.receivedBy} onChange={set('receivedBy')} /></F>
             <F label="Position"><input className="input-field" placeholder="Position" value={form.receivedPosition} onChange={set('receivedPosition')} /></F>
           </div>
           <F label="Date / Time"><input type="datetime-local" className="input-field" value={form.receivedDate} onChange={set('receivedDate')} /></F>
         </Section>
 
-        <Section title="Approved By" accent="#129EAC">
-          <div className="grid grid-cols-2 gap-2">
+        <Section title="Approved By" accent="#629e53">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <F label="Name"><input className="input-field" placeholder="Full name" value={form.approvedBy} onChange={set('approvedBy')} /></F>
             <F label="Position"><input className="input-field" placeholder="Position" value={form.approvedPosition} onChange={set('approvedPosition')} /></F>
           </div>
@@ -165,7 +165,7 @@ export default function RequestForm() {
 
         <button type="submit" disabled={status === 'loading'}
           className="w-full text-white font-semibold py-3.5 rounded-2xl active:scale-95 transition-all shadow-md disabled:opacity-60"
-          style={{ background:'linear-gradient(135deg,#0A4550,#129EAC)' }}>
+          style={{ background:'linear-gradient(135deg,#3d6538,#629e53)' }}>
           {status === 'loading'
             ? <span className="flex items-center justify-center gap-2"><Loader size={15} className="animate-spin"/>Saving…</span>
             : editMode ? '💾 Update Request Form' : '📋 Submit Request Form'}
@@ -175,11 +175,11 @@ export default function RequestForm() {
   );
 }
 
-function Section({ title, accent = '#0D5C6A', children }) {
+function Section({ title, accent = '#4e7e44', children }) {
   return (
     <div className="card space-y-3">
       <h3 className="text-xs font-bold uppercase tracking-wide border-b pb-2"
-        style={{ color: accent, borderColor:'#AAECED' }}>{title}</h3>
+        style={{ color: accent, borderColor:'#96d183' }}>{title}</h3>
       {children}
     </div>
   );

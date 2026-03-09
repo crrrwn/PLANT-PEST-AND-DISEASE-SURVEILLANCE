@@ -2,87 +2,169 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Brand CSS variables (from COLOR_PALETTE.png) ── */
+/* ── Brand CSS variables (from COLOR-THEME.png) ── */
 :root {
-  --brand-dark:  #0D5C6A;
-  --brand-mid:   #129EAC;
-  --brand-light: #00CDD2;
-  --brand-pale:  #E8F9FA;
+  --brand-dark:  #4e7e44;
+  --brand-mid:   #629e53;
+  --brand-light: #96d183;
+  --brand-pale:  #f9e6c2;
+  --brand-accent: #d4957b;
+  /* Unified design tokens */
+  --header-gradient: linear-gradient(160deg, #2d4a28 0%, #3d6538 25%, #4e7e44 55%, #5a8f4a 85%, #629e53 100%);
+  --header-subtitle: #b8e5a8;
+  --card-shadow: 0 2px 8px rgba(78,126,68,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --card-shadow-hover: 0 8px 24px rgba(78,126,68,0.12), 0 2px 6px rgba(0,0,0,0.06);
+  --card-radius: 1rem;
+  --input-radius: 0.75rem;
+  --btn-radius: 1rem;
+  --glass-bg: rgba(255,255,255,0.12);
+  --glass-border: rgba(255,255,255,0.18);
 }
 
 @layer base {
   * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-  html, body, #root { height: 100%; width: 100%; margin: 0; padding: 0; }
-  body { font-family: 'Inter', system-ui, sans-serif; background: #e5e7eb; overflow: hidden; }
+  html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /* Mobile: prevent overscroll, use dynamic viewport */
+    overflow: hidden;
+    -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
+  }
+  body, #root {
+    height: 100%;
+    width: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #e5e7eb;
+    overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 @layer components {
 
-  /* ── App shell — responsive ─────────────────── */
+  /* ── App shell — mobile-first PWA, phone-sized card on desktop ── */
   .app-shell {
     @apply relative flex flex-col bg-white;
     width: 100%;
+    min-width: 0;
+    min-height: 100dvh;
     height: 100dvh;
-    /* Mobile: full screen. Tablet+: centered card */
     max-width: 100%;
     margin: 0 auto;
     overflow: hidden;
+    /* Safe areas for notched devices (iPhone X+, etc.) */
+    padding-top: env(safe-area-inset-top, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
   }
+  /* Very small screens (320px) - ensure content fits */
+  @media (max-width: 359px) {
+    .app-shell { min-height: 568px; }
+  }
+  /* Landscape mobile - reduce min-height to fit */
+  @media (max-height: 500px) and (orientation: landscape) {
+    .app-shell { min-height: 100dvh; height: 100dvh; }
+  }
+  /* Tablet/Desktop: centered phone-sized card (mobile app look) */
   @media (min-width: 640px) {
-    body { display: flex; align-items: center; justify-content: center; background: #cbd5e1; }
-    .app-shell {
-      max-width: 480px;
-      height: 96dvh;
-      border-radius: 2rem;
-      box-shadow: 0 8px 60px rgba(0,0,0,0.35);
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #94a3b8 0%, #cbd5e1 50%, #e2e8f0 100%);
+      min-height: 100dvh;
     }
-  }
-  @media (min-width: 1024px) {
     .app-shell {
-      max-width: 520px;
-      height: 92dvh;
+      max-width: 430px;
+      width: 100%;
+      height: 90dvh;
+      min-height: 640px;
+      max-height: 932px;
+      border-radius: 2rem;
+      box-shadow: 0 25px 60px -12px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.5) inset;
     }
   }
 
   /* ── Scrollable page body ───────────────────── */
   .screen-content {
-    @apply flex-1 overflow-y-auto overflow-x-hidden;
+    @apply flex-1 overflow-y-auto overflow-x-hidden min-h-0;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    background: #f4f8f9;
+    background: linear-gradient(180deg, #fdf8f0 0%, #f9e6c2 30%, #f5e0b8 100%);
+    overscroll-behavior-y: contain;
   }
   .screen-content::-webkit-scrollbar { display: none; }
+  /* Touch-friendly: ensure scroll works on iOS */
+  @supports (-webkit-touch-callout: none) {
+    .screen-content { min-height: -webkit-fill-available; }
+  }
 
   /* ── Buttons ────────────────────────────────── */
   .btn-primary {
-    @apply w-full text-white font-semibold py-3.5 rounded-2xl
-           active:scale-95 transition-all duration-150 shadow-md
-           focus:outline-none;
-    background: linear-gradient(135deg, var(--brand-dark), var(--brand-mid));
+    @apply w-full text-white font-semibold py-3.5
+           active:scale-[0.98] transition-all duration-200 focus:outline-none;
+    background: var(--header-gradient);
+    border-radius: var(--btn-radius);
+    box-shadow: 0 4px 16px rgba(78,126,68,0.4), 0 1px 0 rgba(255,255,255,0.2) inset;
   }
-  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-primary:hover { filter: brightness(1.08); box-shadow: 0 6px 20px rgba(78,126,68,0.45); }
 
   .btn-secondary {
-    @apply w-full bg-white font-semibold py-3.5 rounded-2xl
-           border-2 active:scale-95 transition-all duration-150;
+    @apply w-full bg-white font-semibold py-3.5
+           active:scale-[0.98] transition-all duration-200;
     color: var(--brand-dark);
-    border-color: var(--brand-dark);
+    border: 2px solid var(--brand-dark);
+    border-radius: var(--btn-radius);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   }
+  .btn-secondary:hover { background: var(--brand-pale); border-color: var(--brand-mid); }
 
   /* ── Inputs ─────────────────────────────────── */
   .input-field {
-    @apply w-full bg-white border border-gray-200 rounded-xl px-4 py-3
-           text-sm text-gray-800 placeholder-gray-400
-           focus:outline-none transition-all duration-150;
+    @apply w-full bg-white text-sm text-gray-800 placeholder-gray-400
+           focus:outline-none transition-all duration-200;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--input-radius);
+    padding: 0.75rem 1rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
   }
   .input-field:focus {
     border-color: var(--brand-mid);
-    box-shadow: 0 0 0 3px rgba(18,158,172,0.15);
+    box-shadow: 0 0 0 3px rgba(98,158,83,0.15);
   }
 
   /* ── Cards ──────────────────────────────────── */
   .card {
-    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-4;
+    @apply bg-white p-4;
+    border-radius: var(--card-radius);
+    border: 1px solid rgba(78,126,68,0.08);
+    box-shadow: var(--card-shadow);
+  }
+
+  /* ── Alerts / notices ───────────────────────── */
+  .alert-success {
+    @apply flex items-center gap-2 rounded-xl px-4 py-3;
+    background: linear-gradient(135deg, #fdf8f0 0%, var(--brand-pale) 100%);
+    border: 1px solid rgba(150,209,131,0.5);
+    color: var(--brand-dark);
+    box-shadow: 0 1px 3px rgba(78,126,68,0.06);
+  }
+  .alert-error {
+    @apply flex items-center gap-2 rounded-xl px-4 py-3;
+    background: linear-gradient(135deg, #fffbfb 0%, #fef2f2 100%);
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    box-shadow: 0 1px 3px rgba(239,68,68,0.06);
   }
 
   /* ── Form label ─────────────────────────────── */
@@ -92,21 +174,29 @@
 
   /* ── Bottom nav ─────────────────────────────── */
   .nav-tab {
-    @apply flex flex-col items-center justify-center gap-0.5 flex-1 py-2
-           transition-colors duration-150;
+    @apply flex flex-col items-center justify-center gap-1 flex-1 py-2.5 sm:py-3
+           transition-all duration-200 min-w-0;
     color: #9ca3af;
   }
   .nav-tab.active { color: var(--brand-dark); }
+  .nav-tab:active { transform: scale(0.95); }
+  .nav-tab .nav-icon-wrap {
+    @apply rounded-xl transition-all duration-200;
+  }
+  .nav-tab.active .nav-icon-wrap {
+    background: linear-gradient(135deg, var(--brand-pale) 0%, #f5e0b8 100%);
+    box-shadow: 0 2px 8px rgba(78,126,68,0.15);
+  }
 
   /* ── Record row ─────────────────────────────── */
   .record-row {
-    @apply flex items-start gap-3 p-3 bg-white rounded-xl border border-gray-100 active:bg-gray-50 transition-colors w-full text-left;
+    @apply flex items-start gap-3 p-3 bg-white active:bg-gray-50 transition-colors w-full text-left;
+    border-radius: var(--card-radius);
+    border: 1px solid rgba(78,126,68,0.08);
+    box-shadow: var(--card-shadow);
   }
 
-  /* ── Modal backdrop ─────────────────────────── 
-     FIXED: use inset-0 relative to VIEWPORT, no broken centering trick.
-     The sheet inside is centered with mx-auto.
-  ─────────────────────────────────────────────── */
+  /* ── Modal backdrop — responsive ─────────────── */
   .modal-backdrop {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -117,14 +207,98 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
+    padding: 0;
+  }
+  @media (min-width: 640px) {
+    .modal-backdrop {
+      align-items: center;
+      padding: 1rem;
+    }
   }
 
-  /* Sheet that slides up inside the modal-backdrop */
+  /* Sheet — mobile: bottom sheet, desktop: centered modal */
   .modal-sheet {
-    @apply bg-white rounded-t-3xl flex flex-col;
+    @apply bg-white flex flex-col;
     width: 100%;
     max-width: 520px;
+    min-height: 0;
+    margin: 0 auto;
+    border-radius: 1.5rem 1.5rem 0 0;
+    max-height: 90vh;
+    border: 1px solid rgba(78,126,68,0.06);
   }
+  @media (min-width: 640px) {
+    .modal-sheet {
+      border-radius: 1.5rem;
+      max-height: 85vh;
+      box-shadow: 0 25px 60px -12px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.04);
+    }
+  }
+
+  /* Stat card - dashboard metrics */
+  .stat-card {
+    @apply card flex-1 min-w-0 transition-all duration-200;
+  }
+  .stat-card:hover { box-shadow: var(--card-shadow-hover); }
+
+  /* Page header - unified design */
+  .page-header {
+    @apply shrink-0 relative overflow-hidden;
+    background: var(--header-gradient);
+    padding: max(2.5rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 1rem max(1rem, env(safe-area-inset-left));
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .page-header > * { position: relative; z-index: 1; }
+  @media (min-width: 640px) {
+    .page-header {
+      padding-left: max(1.5rem, env(safe-area-inset-left));
+      padding-right: max(1.5rem, env(safe-area-inset-right));
+    }
+  }
+  .header-title { @apply text-white font-bold text-base leading-tight; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+  .header-subtitle { color: var(--header-subtitle); @apply text-xs; }
+  .header-btn {
+    @apply p-2 rounded-xl transition-all duration-200;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: white;
+    backdrop-filter: blur(8px);
+  }
+  .header-btn:hover { background: rgba(255,255,255,0.22); }
+  .header-btn:active { transform: scale(0.95); }
+
+  /* Content container - responsive padding, safe areas */
+  .content-container {
+    @apply w-full mx-auto;
+    max-width: 100%;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+  @media (min-width: 640px) {
+    .content-container {
+      padding-left: max(1.5rem, env(safe-area-inset-left));
+      padding-right: max(1.5rem, env(safe-area-inset-right));
+    }
+  }
+
+  /* Bottom nav safe area */
+  .nav-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* Responsive grid helpers */
+  .grid-responsive-2 { @apply grid gap-2; grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  @media (min-width: 480px) { .grid-responsive-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .grid-responsive-3 { @apply grid gap-2; grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  @media (min-width: 480px) { .grid-responsive-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 640px) { .grid-responsive-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 }
 
 /* Leaflet z-fix */
@@ -133,9 +307,11 @@
 .leaflet-top,
 .leaflet-bottom    { z-index: 10; }
 
-/* Thin scrollbar */
-.thin-scroll::-webkit-scrollbar { width: 3px; }
-.thin-scroll::-webkit-scrollbar-thumb { background: #5DDDDF; border-radius: 99px; }
+/* Thin scrollbar - visible para makita na may scroll */
+.thin-scroll { scrollbar-width: thin; scrollbar-color: #96d183 transparent; }
+.thin-scroll::-webkit-scrollbar { width: 6px; }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }
+.thin-scroll::-webkit-scrollbar-thumb { background: #96d183; border-radius: 99px; }
 
 /* Animations */
 @keyframes fade-in-up {

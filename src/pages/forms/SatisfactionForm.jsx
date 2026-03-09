@@ -18,7 +18,7 @@ function StarRating({ value, onChange, label }) {
       <div className="flex gap-1">
         {[1,2,3,4,5].map(n => (
           <button key={n} type="button" onClick={() => onChange(n)} className="active:scale-90 transition-transform">
-            <Star size={22} fill={n<=value ? '#14B8C4':'none'} stroke={n<=value ? '#14B8C4':'#d1d5db'} strokeWidth={1.5} />
+            <Star size={22} fill={n<=value ? '#96d183':'none'} stroke={n<=value ? '#96d183':'#d1d5db'} strokeWidth={1.5} />
           </button>
         ))}
       </div>
@@ -117,8 +117,8 @@ export default function SatisfactionForm() {
 
   if (status === 'success') return (
     <div className="flex flex-col items-center justify-center h-full bg-white px-8 gap-4">
-      <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background:'#E8F9FA' }}>
-        <CheckCircle size={44} style={{ color:'#0D5C6A' }} />
+      <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background:'#f9e6c2' }}>
+        <CheckCircle size={44} style={{ color:'#4e7e44' }} />
       </div>
       <h2 className="text-xl font-bold text-gray-800">{editMode ? 'Record Updated!' : 'Survey Submitted!'}</h2>
       <p className="text-sm text-gray-500 text-center">
@@ -127,31 +127,31 @@ export default function SatisfactionForm() {
     </div>
   );
 
-  const ACC  = '#14B8C4';
-  const DARK = '#0D5C6A';
+  const ACC  = '#96d183';
+  const DARK = '#4e7e44';
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center gap-3 px-4 pt-10 pb-4"
-        style={{ background:`linear-gradient(135deg,#0A4550,${ACC})` }}>
+    <div className="flex flex-col h-full min-h-0 overflow-hidden">
+      <div className="flex items-center gap-3 page-header"
+        style={{ background:`linear-gradient(135deg,#3d6538,${ACC})` }}>
         <button onClick={() => navigate('/forms')} className="p-2 rounded-xl" style={{ background:'rgba(255,255,255,0.12)' }}>
           <ChevronLeft size={20} className="text-white" />
         </button>
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color:'#AAECED' }}>
+          <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color:'#96d183' }}>
             {editMode ? 'EDITING — Form 3' : 'Form 3'}
           </p>
           <h1 className="text-white font-bold text-base">Client Satisfaction Survey</h1>
         </div>
         {editMode && (
           <span className="ml-auto text-[10px] font-bold px-2.5 py-1 rounded-full"
-            style={{ background:'rgba(255,255,255,0.15)', color:'#AAECED' }}>EDIT MODE</span>
+            style={{ background:'rgba(255,255,255,0.15)', color:'#96d183' }}>EDIT MODE</span>
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="screen-content px-4 pb-6 pt-4 space-y-4">
+      <form onSubmit={handleSubmit} className="screen-content content-container pb-6 pt-4 space-y-4">
         {status === 'error' && (
-          <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+          <div className="alert-error">
             <AlertCircle size={16} className="text-red-500 shrink-0" />
             <p className="text-red-600 text-sm">{errMsg}</p>
           </div>
@@ -159,7 +159,7 @@ export default function SatisfactionForm() {
 
         {/* Client Type */}
         <div className="card space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-wide border-b pb-2" style={{ color:DARK, borderColor:'#AAECED' }}>Client Type</h3>
+          <h3 className="text-xs font-bold uppercase tracking-wide border-b pb-2" style={{ color:DARK, borderColor:'#96d183' }}>Client Type</h3>
           <div className="flex gap-3">
             {['Individual','Group'].map(t => (
               <button key={t} type="button" onClick={() => setForm(p=>({...p,clientType:t}))}
@@ -175,7 +175,7 @@ export default function SatisfactionForm() {
 
         <Section title="Recipient Information" accent={DARK}>
           <F label="Full Name *"><input className="input-field" placeholder="Juan Dela Cruz" value={form.name} onChange={set('name')} /></F>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <F label="Date of Birth"><input type="date" className="input-field" value={form.dob} onChange={set('dob')} /></F>
             <F label="Gender">
               <select className="input-field" value={form.gender} onChange={set('gender')}>
@@ -184,7 +184,7 @@ export default function SatisfactionForm() {
             </F>
           </div>
           {form.clientType==='Group' && (
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <F label="Association Name"><input className="input-field" placeholder="Association name" value={form.assocName} onChange={set('assocName')} /></F>
               <F label="No. of Members"><input type="number" className="input-field" placeholder="0" value={form.assocMembers} onChange={set('assocMembers')} /></F>
             </div>
@@ -198,7 +198,7 @@ export default function SatisfactionForm() {
               {PROVINCES.map(p => <option key={p}>{p}</option>)}
             </select>
           </F>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <F label="Barangay">
               {hasBarangayMunicipalityList ? (
                 <select
@@ -248,7 +248,7 @@ export default function SatisfactionForm() {
             <input className="input-field" placeholder="e.g. BCA, Trainings, Technical Assistance" value={form.typeOfGoods} onChange={set('typeOfGoods')} autoComplete="off" />
           </F>
           <F label="Purpose"><input className="input-field" placeholder="Purpose" value={form.purpose} onChange={set('purpose')} /></F>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <F label="Target Delivery"><input type="date" className="input-field" value={form.deliveryTarget} onChange={set('deliveryTarget')} /></F>
             <F label="Actual Delivery"><input type="date" className="input-field" value={form.deliveryActual} onChange={set('deliveryActual')} /></F>
           </div>
@@ -256,10 +256,10 @@ export default function SatisfactionForm() {
 
         {/* Ratings */}
         <div className="card space-y-1">
-          <div className="flex items-center justify-between border-b pb-2 mb-2" style={{ borderColor:'#AAECED' }}>
+          <div className="flex items-center justify-between border-b pb-2 mb-2" style={{ borderColor:'#96d183' }}>
             <h3 className="text-xs font-bold uppercase tracking-wide" style={{ color:DARK }}>Feedback Ratings</h3>
             {avgRating && (
-              <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ background:'#E8F9FA' }}>
+              <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ background:'#f9e6c2' }}>
                 <Star size={11} fill={ACC} stroke={ACC} />
                 <span className="text-xs font-bold" style={{ color:DARK }}>{avgRating}/5</span>
               </div>
@@ -286,7 +286,7 @@ export default function SatisfactionForm() {
         </div>
 
         <div className="card space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-wide border-b pb-2" style={{ color:DARK, borderColor:'#AAECED' }}>Timeliness</h3>
+          <h3 className="text-xs font-bold uppercase tracking-wide border-b pb-2" style={{ color:DARK, borderColor:'#96d183' }}>Timeliness</h3>
           <F label="Received goods/services on time?">
             <div className="flex gap-2">
               {['Yes','No'].map(v=>(
@@ -323,11 +323,11 @@ export default function SatisfactionForm() {
   );
 }
 
-function Section({ title, accent = '#0D5C6A', children }) {
+function Section({ title, accent = '#4e7e44', children }) {
   return (
     <div className="card space-y-3">
       <h3 className="text-xs font-bold uppercase tracking-wide border-b pb-2"
-        style={{ color: accent, borderColor:'#AAECED' }}>{title}</h3>
+        style={{ color: accent, borderColor:'#96d183' }}>{title}</h3>
       {children}
     </div>
   );
